@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div ng-controller="registrationCtrl" >
+    
+    <form onsubmit="formSubmit()" >
+
+        <input type="email" name="email" ng-model="user.email" placeholder="email" required/>
+        <input type="password" name="password" ng-model="user.password" placeholder="password" pattern=".{5,10}" title="5 to 10 characters" required/>
+        <input type="text" name="fname" ng-model="user.fname" placeholder="First name" required/>
+        <input type="text" name="lname" ng-model="user.lname" placeholder="Last name" required/>
+        <select ng-options="id as name for (id,name) in colleges" /> 
+        <input type="submit" ng-click="formSubmit()" value="Create account" />{{colleges[0]}}asdasd
+    </form>
+</div>

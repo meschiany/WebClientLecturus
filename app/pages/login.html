@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div ng-controller="loginCtrl" >
+    
+    <form onsubmit="login()" >
+
+        <input type="email" name="email" ng-model="user.email" placeholder="email" required/>
+        <input type="password" name="password" ng-model="user.password" placeholder="password" pattern=".{5,10}" title="5 to 10 characters" required/>
+        
+        <input type="submit" value="Login" />
+    </form>
+</div>
