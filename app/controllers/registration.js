@@ -4,7 +4,7 @@ angular.module('myApp.registration', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/registration', {
-    templateUrl: 'registration/registration.html',
+    templateUrl: 'pages/registration.html',
     controller: 'registrationCtrl'
   });
 }])
