@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<div ng-controller="loginCtrl" >
-    
-    <form onsubmit="login()" >
+<html>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'>
+		<link href='../css/login.css' rel='stylesheet' type='text/css'>
+	</head>
 
-        <input type="email" name="email" ng-model="user.email" placeholder="email" required/>
-        <input type="password" name="password" ng-model="user.password" placeholder="password" pattern=".{5,10}" title="5 to 10 characters" required/>
-        
-        <input type="submit" value="Login" />
-    </form>
-</div>
+	<body>
+		<div ng-controller="loginCtrl" >
+		    <div class="bg">
+
+		    </div>
+
+		    <div class="form">
+		    	<div class="formContent">
+		    		<h1>Lecturus VIT</h1>
+		    		<p>Welcome to Lecturus VIT platform</p>
+				    <form onsubmit="login()" >
+				    	<span class="label">Username</span>
+				        <input type="email" name="email" ng-model="user.email" required/>
+				        <span class="label">Password</span>
+				        <input type="password" name="password" ng-model="user.password" pattern=".{5,10}" title="5 to 10 characters" required/>
+				        
+				        <input class="btn" type="submit" value="Login" />
+				    </form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
