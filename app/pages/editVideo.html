@@ -1,17 +1,63 @@
-<!-- 
+<!DOCTYPE HTML>
+<html>
+<head>
 
-    video edit page.
-    this page will be used to edit and publish videos.
+<title>Video/Audio</title>
 
--->
-<div ng-controller="editVideoCtrl" >
-<video id="myVideo" width="320" height="240" controls>
-    <source src="https://s3-ap-southeast-1.amazonaws.com/lecturus/videos/happyfeet.mp4" type="video/mp4" />
-</video>
+<link rel='stylesheet' type='text/css' href='../css/player.css' />
+<style type="text/css">
+
+</style>
+
+<script src='../js/jquery.js'></script>
+
+<script src='../js/cusVideo.js'></script>
+
+<script type='text/javascript'>
+
+$(document).ready(function() {
+	var content = [];
+	var data = {
+		"id":1,
+		"second": 20,
+		"type": "text",
+		"content": "Daniel"
+	};
+
+	content.push(data);
+	data = {
+		"id":2,
+		"second": 85,
+		"type": "text",
+		"content": "Daniel"
+	};
+	content.push(data);
+	$('video').videoPlayer({
+		'playerWidth' : 0.95,
+		'videoClass' : 'video',
+		'content' : content
+	});
+});
+
+</script>
+
+</head>
+<body style="background-color:#e9e9e9;">
+
+
+<div class="container" >
+	<video width="700"  style="border:2px solid #000">
+		<source src="https://s3-ap-southeast-1.amazonaws.com/lecturus/videos/happyfeet.mp4" type="video/mp4">
+	</video>
+</div>
+
+
 <div id="data-display" >
     {{displayStack['comment'].length}}
     <div ng-repeat="c in displayStack['comment']" >
         {{c.text}}
     </div>
 </div>
-    </div>
+
+</body>
+</html>
