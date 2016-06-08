@@ -1,10 +1,32 @@
 body {
-	font-size: 62.5%;
-	padding: 0;
+	font-size: 15px;
 	margin: 0;
+}
+html, body, #wrapper {
+  height: 100vh;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+}
+#container{
+	flex-grow: 1;	
+}
+
+#contents {
+  flex-grow: 1;
+  overflow: scroll;
+}
+.lineSep { 
+    margin: 25px 0;
+    height: 1px;
+    background: black;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(#f9f9f9), to(white), color-stop(50%, #AAA));
 }
 
 .player {
+	font-size: 65%;
 	background: #2a2a2a;
 	box-sizing: border-box;
 	border-radius: 5px;
@@ -27,7 +49,7 @@ body {
 
 .video {
 	position: relative;
-	margin: 20px;
+	float:left;
 }
 
 .video:hover .player {
@@ -176,9 +198,22 @@ body {
 .player .volume {
 	position: relative;
 	float: left;
-	width: 8%;
-	margin: 0 0 0 4%;
+	width: 6%;
+	margin: 0 0 0 2%;
 	height: 100%;
+}
+
+.player .addContent{
+    position: relative;
+    float: left;
+    width: 6%;
+    margin: 0 0 0 2%;
+    height: 100%;
+    color: white;
+    font-size: 50px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
 }
 
 .player .volume-icon {
@@ -208,7 +243,7 @@ body {
 
 .player .volume-bar-holder {
 	background: #333;
-	width: 20px;
+	width: 15px;
 	box-shadow: inset 0px 0px 5px rgba(0,0,0,0.3);
 	margin: 15px auto;
 	height: 80px;
@@ -221,13 +256,13 @@ body {
 	background: #fff;
 	box-shadow: 0 0 20px rgba(0,0,0,0.3);
 	border-radius: 30px;
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 }
 
 .player .volume-button-holder {
 	position: relative;
-	top: -10px;	
+	top: -5px;	
 }
 
 .player .volume-bar {
@@ -241,7 +276,7 @@ body {
 }
 
 .player .fullscreen {
-	width: 12%;
+	width: 9%;
 	cursor: pointer;
 	float: left;
 	height: 100%;
@@ -279,7 +314,7 @@ body {
 .player .volume-icon span:before {
 	width: 0;
 	height: 0;
-	border: 1em solid transparent;
+	border: 0.7em solid transparent;
 	border-left: none;
 	border-right-color: #fff;
 	z-index: 2;
