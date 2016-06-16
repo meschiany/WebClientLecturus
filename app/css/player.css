@@ -25,6 +25,18 @@ html, body, #wrapper {
     background: -webkit-gradient(linear, 0 0, 100% 0, from(#f9f9f9), to(#f9f9f9), color-stop(50%, #ddd));
 }
 
+.btnlnk{
+	background: 0 0;
+    font-size: 14px;
+    color: #2abfd5;
+    font-weight: 600;
+    margin: 0 10px!important;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 0;
+    text-decoration: underline;
+}
+
 .player {
 	font-size: 65%;
 	background: #2a2a2a;
@@ -50,6 +62,8 @@ html, body, #wrapper {
 .video {
 	position: relative;
 	float:left;
+	border:1px solid #000;
+	height:320px;
 }
 
 .video:hover .player {

@@ -99,15 +99,16 @@
                         + '</div>' 
                     + '</div>').appendTo($that);
 
-                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 100px;position: absolute;background: #2a2a2a;top: 62px;border-radius: 5px;opacity:1;padding: 10px;box-sizing: border-box;display:flex">'
+                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 100px;position: absolute;background: #2a2a2a;top: 62px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;display:flex">'
                         +'<textarea type="text" rows="2" id="inpContent" style="resize: none;height:70px;width:300px;"/>'
                         +'<div style="margin-left:10px;width:80px">  <span class="label">Time on video (seconds)</span>'
                         +'<input type="text" id="inpSec" style="width:50px;margin:10px;">  </div>'
                         +'<div style="width: 200px;display: flex;flex-wrap: wrap;">'
-                        +'<button id="saveContent">New</button>'
-                        +'<button id="setNow">set now</button>'
-                        +'<button id="saveContent">update</button>'
-                        +'<button id="saveContent">delete</button></div>'
+                        +'<button class="btnlnk" id="saveContent">New</button>'
+                        +'<button class="btnlnk" id="setNow">Set Now</button>'
+                        +'<button class="btnlnk" id="update">Update</button>'
+                        // +'<button class="btnlnk" id="deactivate">Delete</button>
+                        +'</div>'
                         +'</div>').appendTo($(".player"));
                 }
 
@@ -138,14 +139,13 @@
                     console.log("problem with post update");
                 }
 
-                function updateContent(elm){
+                function updateContent(postId, newSec){
                     // updateDB
-                    postId=elm.getAttribute("data-content");
                     content = getContentByPostId(postId);
                     var formData = {    
                         'id' : postId,
                         'content': content.content,
-                        'second': $(elm).val(),
+                        'second': newSec,
                         'debug' : true
                     };
 
@@ -153,6 +153,32 @@
 
                     posting.done(updateCallback);
                     
+                }
+
+                function updateContentFromForm(){
+                    for (var i = 0; i < contents.length; i++) {
+                        if (contents[i].id == currentPostId){
+                            contents[i].content = inpContent.value
+                            contents[i].seconds = inpSec.value
+                            break;
+                        }
+                    }
+                }
+
+                function _updateCurrentPostId(){
+                    updateContentFromForm()
+                    updateContent(currentPostId, inpSec.value);
+                }
+
+                function _deactivate(){
+                    var formData = {    
+                        'id' : currentPostId,
+                        'debug' : true
+                    };
+
+                    var posting = $.get( "http://localhost:3000/text/deactivate", formData );
+
+                    posting.done(updateCallback);
                 }
 
                 function fillFields(elm){
@@ -167,11 +193,12 @@
                 // catch change content value
 				$("input[type='range']").on("change", function(){
 
-                    updateContent(this);
+                    updateContent(this.getAttribute("data-content"), $(this).val());
 					_getPosts(updateCallback);
 				});
-
+                var currentPostId;
                 $("input[type='range']").on("mouseup", function(){
+                    currentPostId = this.getAttribute("data-content");
                     fillFields(this);
                 });
 
@@ -250,6 +277,8 @@
                 bufferLength();
                 $("#setNow").bind('click',_setCurrentTime);
                 $("#saveContent").bind('click',_saveContent);
+                $("#update").bind('click',_updateCurrentPostId);
+                // $("#deactivate").bind('click',_deactivate);
 				var inpSec = $("#inpSec")[0];
 				var inpContent = $("#inpContent")[0];
                 // TODO SAVE TO DB AND UPDATE TABLE
