@@ -15,14 +15,24 @@
         return this.each(function() {
 
         	//TODO order this file
+            function _addContentToDB(second, text){
+                var formData = {
+                    'video_id' : _videoId,
+                    'second' : second,
+                    'content' : text,
+                    'debug':true
+                };
 
-        	//TODO reorder this function
-			function _setContentOnPlayer(second, id, width, duration){
-				$('<input type="range" value='
-					 + second + ' data-content="content'+id
-					 + '" style="width:' + width + 'px" min="0" max="' 
-					 + duration + '" />').appendTo($(".contents"));
-			}
+
+                /* Send the data using post with element id name and name2*/
+                var posting = $.get( "http://localhost:3000/text/new", formData );
+
+                //TODO on server if token is invalid redirect to login page
+                posting.done(function( data ) {
+                    console.log(data);
+                    
+                });
+            }
 
             $(this)[0].addEventListener('loadedmetadata', function() {
 
@@ -88,17 +98,82 @@
                             + '<a href="#"> </a>'
                         + '</div>' 
                     + '</div>').appendTo($that);
+
+                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 100px;position: absolute;background: #2a2a2a;top: 62px;border-radius: 5px;opacity:1;padding: 10px;box-sizing: border-box;display:flex">'
+                        +'<textarea type="text" rows="2" id="inpContent" style="resize: none;height:70px;width:300px;"/>'
+                        +'<div style="margin-left:10px;width:80px">  <span class="label">Time on video (seconds)</span>'
+                        +'<input type="text" id="inpSec" style="width:50px;margin:10px;">  </div>'
+                        +'<div style="width: 200px;display: flex;flex-wrap: wrap;">'
+                        +'<button id="saveContent">New</button>'
+                        +'<button id="setNow">set now</button>'
+                        +'<button id="saveContent">update</button>'
+                        +'<button id="saveContent">delete</button></div>'
+                        +'</div>').appendTo($(".player"));
                 }
 
 
-                for (var i = 0; i < settings.content.length; i++) {
-                    divs += _setContentOnPlayer($settings.content[i].second, $settings.content[i].id, progressWidth, duration);
+                for (var i = 0; i < contents.length; i++) {
+                    _setContentOnPlayer(contents[i].second, contents[i].id);
+                }
+
+                function addTimePosts(){
+                    for (var i = 0; i < contents.length; i++) {
+                        _setContentOnPlayer(contents[i].second, contents[i].id);
+                    }
+                }
+
+                function _setContentOnPlayer(second, id){
+                    $('<input type="range" value='
+                        + second + ' data-content='+id
+                        + ' style="width:' + progressWidth + 'px" min="0" max="' 
+                        + duration + '" />').appendTo($(".contents"));
+                }
+
+                function getContentByPostId(postId){
+                    for (var i = 0; i < contents.length; i++) {
+                        if (contents[i].id == postId){
+                            return contents[i];
+                        }
+                    }
+                    console.log("problem with post update");
+                }
+
+                function updateContent(elm){
+                    // updateDB
+                    postId=elm.getAttribute("data-content");
+                    content = getContentByPostId(postId);
+                    var formData = {    
+                        'id' : postId,
+                        'content': content.content,
+                        'second': $(elm).val(),
+                        'debug' : true
+                    };
+
+                    var posting = $.get( "http://localhost:3000/text/updater", formData );
+
+                    posting.done(updateCallback);
+                    
+                }
+
+                function fillFields(elm){
+                    postId=elm.getAttribute("data-content");
+                    content = getContentByPostId(postId);
+
+                    $("#inpContent").val(content.content);
+                    $("#inpSec").val(content.second);
+
                 }
 
                 // catch change content value
 				$("input[type='range']").on("change", function(){
-					_setContentSecond(this);
+
+                    updateContent(this);
+					_getPosts(updateCallback);
 				});
+
+                $("input[type='range']").on("mouseup", function(){
+                    fillFields(this);
+                });
 
 				// Width of the video
                 $videoWidth = $this.width();
@@ -173,20 +248,38 @@
 
                 // Run the buffer function
                 bufferLength();
-
+                $("#setNow").bind('click',_setCurrentTime);
                 $("#saveContent").bind('click',_saveContent);
 				var inpSec = $("#inpSec")[0];
 				var inpContent = $("#inpContent")[0];
                 // TODO SAVE TO DB AND UPDATE TABLE
                 // IF FAIL - PROMPET MSG
                 function _saveContent(){
+                    contents.push({"second":inpSec.value,"content":inpContent.value,"type":"text"})
 					_setContentOnPlayer(inpSec.value, 3, progressWidth, duration);
+                    printData();
 					_addContentToDB(inpSec.value, inpContent.value);
                 }
 
-                function _showNewContent(){
+                function _setCurrentTime(){
                 	inpSec.value = Math.round($spc.currentTime);
 
+                }
+
+                function showNewPostForm(){
+                    $that.find('.addContent').css("background-color","#4f4f4f");
+                    $that.find('#addPostForm').css("display","flex");
+                    setTimeout(function(){
+                        $that.find('#addPostForm').css("opacity","1");
+                    },0)
+                }
+
+                function hideNewPostForm(){
+                    $that.find('.addContent').css("background-color","#2a2a2a");
+                    $that.find('#addPostForm').css("opacity","0");
+                    setTimeout(function(){
+                        $that.find('#addPostForm').css("display","none");
+                    },300);
                 }
 
                 // The timing function, updates the time.
@@ -289,7 +382,7 @@
                     $spc.currentTime = currentTime;
                 });
 
-                $that.find('.addContent').bind('click', _showNewContent);
+                
 
                 // When the user clicks on the volume bar holder, initiate the volume change event
                 $that.find('.volume-bar-holder').bind('mousedown', function(e) {
@@ -360,6 +453,42 @@
                     $volhover = true;
                 }, function() {
                     $volhover = false;
+                });
+
+
+                var myform = false;
+                $that.find('#addPostForm').mouseenter(function() {
+                    myform = true;
+                });
+
+                $that.find('#addPostForm').mouseleave(function() {
+                    setTimeout(function(){
+                        if (!myform && !formLock){
+                            hideNewPostForm();
+                        }
+                    },10);
+                    myform = false;
+                });
+
+                $that.find('.addContent').hover(function() {
+                    myform = true;
+                    showNewPostForm();
+                });
+
+                $that.find('.addContent').mouseleave(function() {
+                    setTimeout(function(){
+                        if (!myform && !formLock){
+                            hideNewPostForm();
+                        }
+                    },10);
+                    myform = false;
+                });
+                var formLock = false;
+                $that.find('.addContent').click(function () {
+                    formLock = !formLock;
+                    if (formLock){
+                        showNewPostForm();
+                    }
                 });
 
 

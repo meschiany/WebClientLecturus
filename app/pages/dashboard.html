@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'>
+		<link href='../css/login.css' rel='stylesheet' type='text/css'>
+		<link rel='stylesheet' type='text/css' href='../css/player.css' />
+		<script src='../js/jquery.js'></script>
+		<script type="text/javascript">
+			function getToken(){
+				return window.localStorage.getItem("vitToken");
+			}
+
+			function getVits(){
+				var formData = {	
+	        		'token'       : getToken(),
+	    		};
+
+	    		var posting = $.get( "http://localhost:3000/video/get", formData );
+	    		posting.error(function(){
+	    			$("#noToken").css("display","block");
+	    		});
+				//TODO on server if token is invalid redirect to login page
+				posting.done(function( data ) {
+					console.log(data);
+					if (data.status == "success"){
+						var vits = data.data;
+						for (var i = 1; i < vits.length; i++) {
+							$("#contents").append("<div class=lineSep></div>");
+							$("#contents").append("<a href=editVideo.html?videoId="+vits[i].id+">"+vits[i].title+"</a>");
+						}	
+					}
+					
+				});
+			}
+
+			function getCourses(){
+				var formData = {	
+	        		'token'       : getToken(),
+	    		};
+
+	    		var posting = $.get( "http://localhost:3000/video/get", formData );
+
+				//TODO on server if token is invalid redirect to login page
+				posting.done(function( data ) {
+					console.log(data);
+					var vits = data.data;
+					for (var i = 1; i < vits.length; i++) {
+						$("#contents").append("<div class=lineSep></div>");
+						$("#contents").append(vits[i].title);
+					}
+				});
+			}
+
+			$(document).ready(function() { 
+
+				$("#db_toggle").click(function(){
+					var margin = parseInt($("#db_slide").css("margin-right"));
+					if (margin > 0){
+						$("#db_slide").css("margin-right","0");
+						$("#lblCourses").css('opacity',0);
+						$("h1").css("opacity",0);
+						setTimeout(function(){
+							$("#lblCourses").html("<- My courses");
+							$("h1").html("My VIT's");
+							$("#lblCourses").css('opacity',1);
+							$("h1").css("opacity",1);
+						},500);
+					}else{
+						$("#db_slide").css("margin-right","50%");
+						$("#lblCourses").css('opacity',0);
+						$("h1").css("opacity",0);
+						setTimeout(function(){
+							$("#lblCourses").html("My Vits ->");
+							$("h1").html("My Courses");
+							$("#lblCourses").css('opacity',1);
+							$("h1").css("opacity",1);
+						},500);
+					}
+				});
+
+				getVits();
+				// getCourses();
+		
+			});
+			
+		</script>
+	</head>
+	<body style="margin:0;padding:0; font-family: 'Roboto', sans-serif;">
+		<div ng-controller="dashboardCtrl" >
+			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
+
+		    </div>
+		    <div class="bg" style="width:50%; height:100vh; right:0px; background:#2abfd5 url(../images/deshboardbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
+
+		    </div>
+		   	<div id="db_slide" class="form" style="width:50%; height:100vh; background-color:#f9f9f9; right:0; box-shadow: 0 14px 28px rgba(0,0,0,.25),0 0 10px rgba(0,0,0,.22); position: absolute; overflow: hidden;margin-right: 0%;transition: all 0.8s ease-in-out;display: flex;flex-direction: column;padding: 20px;box-sizing: border-box;">
+		    	<div>
+		    		<button class="btn" style="width:155px;" id="db_toggle">
+		    			<span id="lblCourses" style="transition: all 0.5s ease-in-out;"><- My courses</span></button>
+		    		<h1 style="clear:both; font-size: 30px;margin-top: 100px;font-weight: 300;color: #2abfd5;width: 100%;transition: all 0.5s ease-in-out;">My VIT's</h1>
+		    	
+				</div>
+				<div id="contents">
+
+				</div>
+			</div>
+			<div id="noToken" style="position:absolute;margin-left: 10%;width:60%;height:100px;background-color:#2abfd5;opacity:0.65;border:2px solid #0a9fb5;display:none;margin-top:30%;text-align: center;font-size: x-large;font-weight: bold;padding: 10%;">
+				Sorry the token is not valid please re-connect at homepage.
+				<a href="login.html" class="btn" style="position: absolute;bottom:0;right: 0;">OK</a>
+			</div>
+		</div>
+	</body>
+</html>

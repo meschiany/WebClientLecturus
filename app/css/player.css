@@ -22,7 +22,7 @@ html, body, #wrapper {
     margin: 25px 0;
     height: 1px;
     background: black;
-    background: -webkit-gradient(linear, 0 0, 100% 0, from(#f9f9f9), to(white), color-stop(50%, #AAA));
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(#f9f9f9), to(#f9f9f9), color-stop(50%, #ddd));
 }
 
 .player {
@@ -211,7 +211,7 @@ html, body, #wrapper {
     height: 100%;
     color: white;
     font-size: 50px;
-    padding: 5px;
+    
     text-align: center;
     cursor: pointer;
 }

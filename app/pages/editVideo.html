@@ -5,6 +5,7 @@
 <title>Video/Audio</title>
 
 <link rel='stylesheet' type='text/css' href='../css/player.css' />
+<link rel='stylesheet' type='text/css' href='../css/login.css' />
 <style type="text/css">
 
 </style>
@@ -19,22 +20,7 @@
 var _videoId;
 var vit;
 var contents = [];
-	var data = {
-		"id":1,
-		"second": 10,
-		"type": "text",
-		"content": "Daniel"
-	};
-
-	contents.push(data);
-	data = {
-		"id":2,
-		"second": 15,
-		"type": "text",
-		"content": "Dana"
-	};
-	contents.push(data);
-
+	
 function getContent(sec){
 	var result = contents[0];
 	for (var i = 0; i < contents.length; i++) {
@@ -87,9 +73,16 @@ function getUrlParameter(sParam) {
         }
     }
 }
+function sortfunction(a, b){
+	if (a.second > b.second){
+		return 1
+	}
+	return -1
+}
 
 function printData(){
-
+	$("#contents").html("");
+	contents.sort(sortfunction);
 	var table = document.getElementById("posts");
 	if (contents.length==0){
 		return;
@@ -98,41 +91,63 @@ function printData(){
 	for (var i = 1; i < contents.length; i++) {
 		$("#contents").append("<div class=lineSep></div>");
 		$("#contents").append(contents[i].content);
-	
-		
-		var row = table.insertRow(table.rows.length);
-		row.setAttribute("data-content", "content"+contents[i].id);
-		
-		var id = row.insertCell(0);
-		var second = row.insertCell(1);
-		var type = row.insertCell(2);
-		var content = row.insertCell(3);
-
-		id.innerHTML = contents[i].id;
-		second.innerHTML = contents[i].second;
-		type.innerHTML = contents[i].type;
-		content.innerHTML = contents[i].content;
 	}
 }
 
 function setVideoSrc(videoId){
-	$("#vitPlayer source").attr("src","https://s3-ap-southeast-1.amazonaws.com/lecturus/videos/"+videoId+".mp4");
+	$("#vitPlayer source").attr("src","https://s3-ap-southeast-1.amazonaws.com/lecturus/videos/1.mp4");
+	// $("#vitPlayer source").attr("src","../1.mp4");
+}
+
+
+var initCallback = function( data ) {
+	contents = data.data;
+	for (var i = 0; i < contents.length; i++) {
+		contents[i].type="text";
+	}
+	// initPosts();
+	printData();
+	$('video').on("timeupdate", setPreview);
+}
+
+var updateCallback = function( data ) {
+	for (var i = 0; i < contents.length; i++) {
+		if (contents[i].id == data.text_id){
+			for (var key in data){
+				contents[i][key] = data[key];
+			}
+			break;
+		}
+	}
+	printData();
+}
+
+
+
+
+function _getPosts(callback){
+	var formData = {	
+		'filters[video_id]' : _videoId,
+		'debug' : true
+	};
+
+	var posting = $.get( "http://localhost:3000/text/get", formData );
+
+	posting.done(callback);
 }
 
 $(document).ready(function() { 
 	_videoId = getUrlParameter("videoId");
 	vit = $('video')[0];
-
-	setVideoSrc(_videoId);
-	
-	printData();
 	$('video').videoPlayer({
 		'playerWidth' : 0.95,
 		'videoClass' : 'video',
-		'content' : contents
 	});
 
-	$('video').on("progress", setPreview);
+	setVideoSrc(_videoId);
+	_getPosts(initCallback);
+
+
 });
 
 </script>
@@ -153,15 +168,7 @@ $(document).ready(function() {
 
 		</div>
 
-<!-- 
-
-		<div style="clear:both">
-			<input type="text" id="inpSec">
-			<input type="text" id="inpContent">
-			<button id="saveContent">New</button>
-		</div> -->
-
-		<div id="contents">
+		<div id="contents" style="margin:20px">
 							<table id="posts" style="display:none;">
 								<th>id</th>
 								<th>seconds</th>

@@ -19,7 +19,12 @@ p {
   margin-bottom: 30px;
 }
 
-.select, input{
+a{
+  text-decoration: none;
+    color: #000;
+}
+
+.select, input[type='text'], input[type='email'],input[type='password']{
   width: 100%; 
   height: 25px; 
   font-size:20px; 
@@ -28,7 +33,7 @@ p {
 
 .bg {
   width:50%; 
-  height:100vh; 
+  height:100vh;   
   background:#2abfd5 url(../images/loginbg.jpg); 
   background-size: cover; 
   background-position: 50% 50%; 
@@ -79,6 +84,8 @@ p {
   outline: 0;
   background: #2abfd5; 
   color: #fff;
+  opacity: 1;
+
 }
 
 .lastname{
