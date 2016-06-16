@@ -1,17 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<title>Video/Audio</title>
+
+<link rel='stylesheet' type='text/css' href='../css/player.css' />
+<style type="text/css">
+
+</style>
+
+<script src='../js/jquery.js'></script>
+
+<script src='../js/cusVideo.js'></script>
+
+
+<script type='text/javascript'>
+
+var _videoId;
+var vit;
+var contents = [];
+	var data = {
+		"id":1,
+		"second": 10,
+		"type": "text",
+		"content": "Daniel"
+	};
+
+	contents.push(data);
+	data = {
+		"id":2,
+		"second": 15,
+		"type": "text",
+		"content": "Dana"
+	};
+	contents.push(data);
+
+function getContent(sec){
+	var result = contents[0];
+	for (var i = 0; i < contents.length; i++) {
+		curCon = contents[i];
+		result = curCon;
+		if (curCon.second<sec){
+			continue;
+		}
+		if (curCon.second > sec){
+			result = curCon;
+			break;
+		}
+	};
+	return result;
+}
+
+function setText(res){
+	$("#preview").html(res.content);
+}
+
+function setPreview(){
+	if (contents.length==0){
+		return;
+	}
+	var res = getContent(vit.currentTime);
+	switch (res.type){
+		case "text":
+			setText(res);
+			break;
+	}
+}
+
+function _setContentSecond(elm){
+	console.log("The content with id: "+ elm.getAttribute("data-content") + " set new second: " + elm.value);
+	console.log("TODO: update database with new second of content");
+	$("tr[data-content='"+elm.getAttribute("data-content")+"']")[0].cells[1].innerHTML = elm.value;
+}
+
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+}
+
+function printData(){
+
+	var table = document.getElementById("posts");
+	if (contents.length==0){
+		return;
+	}
+	$("#contents").append(contents[0].content);	
+	for (var i = 1; i < contents.length; i++) {
+		$("#contents").append("<div class=lineSep></div>");
+		$("#contents").append(contents[i].content);
+	
+		
+		var row = table.insertRow(table.rows.length);
+		row.setAttribute("data-content", "content"+contents[i].id);
+		
+		var id = row.insertCell(0);
+		var second = row.insertCell(1);
+		var type = row.insertCell(2);
+		var content = row.insertCell(3);
+
+		id.innerHTML = contents[i].id;
+		second.innerHTML = contents[i].second;
+		type.innerHTML = contents[i].type;
+		content.innerHTML = contents[i].content;
+	}
+}
+
+function setVideoSrc(videoId){
+	$("#vitPlayer source").attr("src","https://s3-ap-southeast-1.amazonaws.com/lecturus/videos/"+videoId+".mp4");
+}
+
+$(document).ready(function() { 
+	_videoId = getUrlParameter("videoId");
+	vit = $('video')[0];
+
+	setVideoSrc(_videoId);
+	
+	printData();
+	$('video').videoPlayer({
+		'playerWidth' : 0.95,
+		'videoClass' : 'video',
+		'content' : contents
+	});
+
+	$('video').on("progress", setPreview);
+});
+
+</script>
+
+</head>
+<body style="background-color:#f9f9f9;">
+
+	<div id="wrapper"> 
+
+		<div class="container" style="float:left; margin:20px;" >
+			<video id="vitPlayer" width="640"  style="border:1px solid #000;">
+				<source type="video/mp4">
+			</video>
+
+			<div id="preview" style="margin:20px;display:inline-block">
+
+			</div>
+
+		</div>
+
 <!-- 
 
-    video edit page.
-    this page will be used to edit and publish videos.
+		<div style="clear:both">
+			<input type="text" id="inpSec">
+			<input type="text" id="inpContent">
+			<button id="saveContent">New</button>
+		</div> -->
 
--->
-<div ng-controller="editVideoCtrl" >
-<video id="myVideo" width="320" height="240" controls>
-    <source src="https://s3-ap-southeast-1.amazonaws.com/lecturus/videos/happyfeet.mp4" type="video/mp4" />
-</video>
-<div id="data-display" >
-    {{displayStack['comment'].length}}
-    <div ng-repeat="c in displayStack['comment']" >
-        {{c.text}}
-    </div>
-</div>
-    </div>
+		<div id="contents">
+							<table id="posts" style="display:none;">
+								<th>id</th>
+								<th>seconds</th>
+								<th>type</th>
+								<th>content</th>
+							</table>
+		</div>
+		<!-- 
+
+		<div id="data-display" >
+		    {{displayStack['comment'].length}}
+		    <div ng-repeat="c in displayStack['comment']" >
+		        {{c.text}}
+		    </div>
+		</div> -->
+	</div>
+
+</body>
+</html>
