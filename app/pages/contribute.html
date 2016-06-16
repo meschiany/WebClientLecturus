@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<div>
+
+    <ul class="posts" >
+        <li ng-repeat="p in posts" >
+            {{p.content}} - {{p.created_at}}
+        </li>
+    </ul>
+    <textarea ng-model="postText" ></textarea>
+    <button ng-click="sendPost()" >Send</button>
+</div>

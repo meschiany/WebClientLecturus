@@ -34,7 +34,7 @@ function APIAction($http, module, action){
     
     this.get = function(success, failure){
         
-        $http.get("http://lecturus2.herokuapp.com/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString())
+        $http.get("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&debug=true")
                 .then(success,failure);
         return this;
     }
