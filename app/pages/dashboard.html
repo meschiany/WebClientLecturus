@@ -6,8 +6,49 @@
 		<link rel='stylesheet' type='text/css' href='../css/player.css' />
 		<script src='../js/jquery.js'></script>
 		<script type="text/javascript">
+			var vit = {};
 			function getToken(){
 				return window.localStorage.getItem("vitToken");
+			}
+
+			function setContentVits(){
+				var data = vit.vits;
+				for (var i = 0; i < data.length; i++) {
+					$("#vits").append("<div class=lineSep></div>");
+					$("#vits").append("<a href=editVideo.html?videoId="+data[i].id+">"+data[i].title+"</a>");
+				}	
+			}
+
+			function setCourseVideos(id){
+				var data = vit.courses.videos;
+				$("#courseVideos").html("");
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].course_id == id){
+						var date = new Date(data[i].updated_at)
+						var d = new Date(data[i].updated_at)
+						d = [(date.getDate()), (date.getMonth()+1), date.getFullYear()].join('/');
+						d = d + " " + [(date.getHours()), (date.getMinutes()+1)].join(':');
+						$("#courseVideos").append("<div class=lineSep></div>");
+						$("#courseVideos").append("<span style='cursor:pointer;' course_id="+data[i].id+">"+data[i].title+" - <span style='font-size:10px;'>Last modified: <span style='font-size:10px;color:rgb(42, 191, 213);'>"+d+"</span></span></span>");	
+					}
+				}
+			}
+
+			function setContentCourses(){
+				var data = vit.courses.courses;
+				for (var i = 0; i < data.length; i++) {
+					$("#courses").append("<div class=lineSep></div>");
+					$("#courses").append("<span class='course' style='cursor:pointer;' course_id="+data[i].id+">"+data[i].name+"</span>");
+				}
+
+				$(".course").mouseenter(
+					function(){
+						$("#courseVideosOverlay").css("opacity","1");
+						setCourseVideos($(this).attr("course_id"));
+					}).mouseleave( 
+					function(){
+						
+					});
 			}
 
 			function getVits(){
@@ -23,11 +64,8 @@
 				posting.done(function( data ) {
 					console.log(data);
 					if (data.status == "success"){
-						var vits = data.data;
-						for (var i = 1; i < vits.length; i++) {
-							$("#contents").append("<div class=lineSep></div>");
-							$("#contents").append("<a href=editVideo.html?videoId="+vits[i].id+">"+vits[i].title+"</a>");
-						}	
+						vit.vits = data.data;
+						setContentVits();
 					}
 					
 				});
@@ -37,39 +75,51 @@
 				var formData = {	
 	        		'token'       : getToken(),
 	    		};
-
-	    		var posting = $.get( "http://localhost:3000/video/get", formData );
-
+				var posting = $.get( "http://localhost:3000/course/getAllWithVideos", formData );
+	    		posting.error(function(){
+	    			$("#noToken").css("display","block");
+	    		});
 				//TODO on server if token is invalid redirect to login page
 				posting.done(function( data ) {
 					console.log(data);
-					var vits = data.data;
-					for (var i = 1; i < vits.length; i++) {
-						$("#contents").append("<div class=lineSep></div>");
-						$("#contents").append(vits[i].title);
+					if (data.status == "success"){
+						vit.courses = {}
+						vit.courses.courses = data.data.courses;
+						vit.courses.videos = data.data.videos;
+						setContentCourses();
 					}
 				});
 			}
 
 			$(document).ready(function() { 
-
+				
 				$("#db_toggle").click(function(){
 					var margin = parseInt($("#db_slide").css("margin-right"));
 					if (margin > 0){
 						$("#db_slide").css("margin-right","0");
 						$("#lblCourses").css('opacity',0);
 						$("h1").css("opacity",0);
+						$("#vits").css("display","block");
+						$("#courses").css("opacity",0);
 						setTimeout(function(){
+							$("#courses").css("display","none");
+							$("#vits").css("opacity",1);
 							$("#lblCourses").html("<- My courses");
 							$("h1").html("My VIT's");
 							$("#lblCourses").css('opacity',1);
 							$("h1").css("opacity",1);
+							$("#courseVideosOverlay").css("opacity","0");
+							$("#courseVideos").html("");
 						},500);
 					}else{
 						$("#db_slide").css("margin-right","50%");
 						$("#lblCourses").css('opacity',0);
 						$("h1").css("opacity",0);
+						$("#courses").css("display","block");
+						$("#vits").css("opacity",0);
 						setTimeout(function(){
+							$("#vits").css("display","none");
+							$("#courses").css("opacity",1);	
 							$("#lblCourses").html("My Vits ->");
 							$("h1").html("My Courses");
 							$("#lblCourses").css('opacity',1);
@@ -79,7 +129,8 @@
 				});
 
 				getVits();
-				// getCourses();
+				getCourses();
+
 		
 			});
 			
@@ -87,12 +138,20 @@
 	</head>
 	<body style="margin:0;padding:0; font-family: 'Roboto', sans-serif;">
 		<div ng-controller="dashboardCtrl" >
-			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
+			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;"></div>
 
-		    </div>
-		    <div class="bg" style="width:50%; height:100vh; right:0px; background:#2abfd5 url(../images/deshboardbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
 
-		    </div>
+
+		    <div id="courseVid" class="bg" style="transition: all 0.4s ease-in-out;width:50%; height:100vh; right:0px; background:#2abfd5 url(../images/deshboardbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;"></div>
+
+	    
+		    <div id="courseVideosOverlay" class="bg" style="opacity:0;transition: all 0.4s ease-in-out;width:50%; height:100vh; right:0px; background:rgba(255,255,255,0.8); position: absolute;"></div>
+
+		    <div id="courseVideos" class="bg" style="transition: all 0.4s ease-in-out;width:50%; height:100vh; right:0px; background:rgba(0,0,0,0); position: absolute;"></div>
+
+
+
+
 		   	<div id="db_slide" class="form" style="width:50%; height:100vh; background-color:#f9f9f9; right:0; box-shadow: 0 14px 28px rgba(0,0,0,.25),0 0 10px rgba(0,0,0,.22); position: absolute; overflow: hidden;margin-right: 0%;transition: all 0.8s ease-in-out;display: flex;flex-direction: column;padding: 20px;box-sizing: border-box;">
 		    	<div>
 		    		<button class="btn" style="width:155px;" id="db_toggle">
@@ -100,11 +159,14 @@
 		    		<h1 style="clear:both; font-size: 30px;margin-top: 100px;font-weight: 300;color: #2abfd5;width: 100%;transition: all 0.5s ease-in-out;">My VIT's</h1>
 		    	
 				</div>
-				<div id="contents">
+				<div id="vits" style="position:absolute;width:100%;transition: all 0.8s ease-in-out;">
+
+				</div>
+				<div id="courses" style="opacity:0;transition: all 0.8s ease-in-out;">
 
 				</div>
 			</div>
-			<div id="noToken" style="position:absolute;margin-left: 10%;width:60%;height:100px;background-color:#2abfd5;opacity:0.65;border:2px solid #0a9fb5;display:none;margin-top:30%;text-align: center;font-size: x-large;font-weight: bold;padding: 10%;">
+			<div id="noToken" style="position:absolute;margin-left: 10%;width:60%;height:100px;background-color:#2abfd5;opacity:0.65;border:2px solid #0a9fb5;display:none;margin-top:10%;text-align: center;font-size: x-large;font-weight: bold;padding: 10%;">
 				Sorry the token is not valid please re-connect at homepage.
 				<a href="login.html" class="btn" style="position: absolute;bottom:0;right: 0;">OK</a>
 			</div>

@@ -5,7 +5,31 @@
 		<link href='../css/login.css' rel='stylesheet' type='text/css'>
 		<script src='../js/jquery.js'></script>
 		<script type="text/javascript">
+		var colleges;
 			$(document).ready(function() { 
+
+				function setCollegeList(){
+					var posting = $.get( "http://localhost:3000/college/get");
+
+					posting.done(function( data ) {
+						console.log(data);
+						for(element in data.data){
+						   	var opt = document.createElement("option");
+						   	if (element.name == ""){
+						   		continue
+						   	}
+						   	opt.value= element.id;
+						   	opt.innerHTML = element.name; // whatever property it has
+
+						   // then append it to the select element
+						   newSelect.appendChild(opt);
+						   index++;
+						}
+						if (data.status){
+							window.localStorage.setItem("vitToken", data.data.token);
+						}
+					});
+				}
 		
 				$("#register").submit(function(event) {
 
@@ -34,6 +58,8 @@
 						}
 					});
 				});
+
+				setCollegeList();
 			});
 			
 		</script>
@@ -62,7 +88,7 @@
 					    </div>
 				        <span class="label">College</span>
 				        <select class="select" ng-options="id as name for (id,name) in colleges" /> 
-				        <input class="btn"type="submit" ng-click="formSubmit()" value="Create account" />{{colleges[0]}}
+				        <input class="btn"type="submit" ng-click="formSubmit()" value="Create account" />
 				    </form>
 				</div>
 			</div>

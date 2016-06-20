@@ -64,6 +64,16 @@ a{
   color:#2abfd5
 }
 
+#vits, #courses, #courseVideos {
+  flex-grow: 1;
+  overflow: scroll;
+}
+
+ #courseVideos{
+  padding:20px;
+  box-sizing: border-box;
+ }
+
 .btn {
   width: auto;
   float: right;
