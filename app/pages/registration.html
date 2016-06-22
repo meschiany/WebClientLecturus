@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'>
+		<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'> -->
 		<link href='../css/login.css' rel='stylesheet' type='text/css'>
 		<script src='../js/jquery.js'></script>
 		<script type="text/javascript">
@@ -13,7 +13,9 @@
 
 					posting.done(function( data ) {
 						console.log(data);
-						for(element in data.data){
+						for (var i = data.data.length - 1; i >= 0; i--) {
+							element = data.data[i]
+						
 						   	var opt = document.createElement("option");
 						   	if (element.name == ""){
 						   		continue
@@ -22,8 +24,7 @@
 						   	opt.innerHTML = element.name; // whatever property it has
 
 						   // then append it to the select element
-						   newSelect.appendChild(opt);
-						   index++;
+						   $("#collegeSlct").append(opt);
 						}
 						if (data.status){
 							window.localStorage.setItem("vitToken", data.data.token);
@@ -54,7 +55,11 @@
 					posting.done(function( data ) {
 						console.log(data);
 						if (data.status){
-							window.localStorage.setItem("vitToken", data.data.token);
+							// window.localStorage.setItem("vitToken", data.data.token);
+							$(".form").css("right","50%");
+							$("#regBtn").prop('disabled', true);
+							$("#regBtn").prop('cursor', "default");
+							$("#dlLink").attr("href",data.data.link);
 						}
 					});
 				});
@@ -69,7 +74,16 @@
 			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
 
 		    </div>
-		   	<div class="form" style="width:50%; height:100vh; background-color:#f9f9f9; right:0; box-shadow: 0 14px 28px rgba(0,0,0,.25),0 0 10px rgba(0,0,0,.22); position: absolute; overflow: hidden;margin-left: 50%;">
+		    
+
+		    <div style="width:50%; height:100vh; background-color:#f9f9f9; right:0; position: absolute; overflow: hidden;margin-left: 50%;padding: 10%;box-sizing: border-box;color: #2abfd5;font-size: 40px;">
+		    	Woo-hoo!<br><br>
+		    	<span style="font-size:30px">You now can <a id="dlLink" href="" style="text-decoration:underline">download VIT client</a> or <a href="login.html" style="text-decoration:underline">login</a><br>
+		    	P.S. you can always download the client later on dashboard settings.
+		    </div>
+
+
+		   	<div class="form" style="transition: all 0.4s ease-in-out;width:50%; height:100vh; background-color:#f9f9f9; right:0%; box-shadow: 0 14px 28px rgba(0,0,0,.25),0 0 10px rgba(0,0,0,.22); position: absolute; overflow: hidden;margin-left: 50%;">
 		    	<div style="width: 250px; top: 50%; position: absolute; left: 50%; margin: -162px auto 0 -125px;">
 		    		<h1 style="font-size: 30px;font-weight: 300;color: #2abfd5;width: 100%;">Lecturus VIT</h1>
 		    		<p style="font-size: 15px;font-weight: 400;line-height: 26px;color: #757575;margin-bottom: 30px;">Welcome to Lecturus VIT platform</p>
@@ -87,8 +101,8 @@
 					        <input type="text" name="lname" ng-model="user.lname" required/>
 					    </div>
 				        <span class="label">College</span>
-				        <select class="select" ng-options="id as name for (id,name) in colleges" /> 
-				        <input class="btn"type="submit" ng-click="formSubmit()" value="Create account" />
+				        <select id="collegeSlct" class="select" ng-options="id as name for (id,name) in colleges" /> 
+				        <input id="regBtn" class="btn"type="submit" ng-click="formSubmit()" value="Create account" />
 				    </form>
 				</div>
 			</div>

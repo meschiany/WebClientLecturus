@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'>
+		<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'> -->
 		<link href='../css/login.css' rel='stylesheet' type='text/css'>
 		<link rel='stylesheet' type='text/css' href='../css/player.css' />
 		<script src='../js/jquery.js'></script>
@@ -91,7 +91,30 @@
 				});
 			}
 
+			function logout(){
+				window.localStorage.setItem("vitToken","");
+				window.location = "login.html";
+			}
+
 			$(document).ready(function() { 
+				var settingsMenu = false;
+
+				$("#logout").click(function(){
+					logout();
+				});
+
+				$("#stngBtn").click(function(){
+					if (settingsMenu){
+						$("#stngMenu").css("padding","0px");
+						$("#stngMenu").css("height","3px");
+						settingsMenu = false;
+					}else{
+						$("#stngMenu").css("padding","15px");
+						$("#stngMenu").css("height","20px");
+						settingsMenu = true;
+					}
+				});
+
 				
 				$("#db_toggle").click(function(){
 					var margin = parseInt($("#db_slide").css("margin-right"));
@@ -138,6 +161,18 @@
 	</head>
 	<body style="margin:0;padding:0; font-family: 'Roboto', sans-serif;">
 		<div ng-controller="dashboardCtrl" >
+
+			<div id="stngMenu" style="overflow:hidden;transition: all 0.4s ease-in-out;position:absolute;z-index:1;height:3px; width:100vw;background-color:#444;">
+				<a href="https://s3-ap-southeast-1.amazonaws.com/lecturus/VITClient.jar">
+					download client
+				</a>
+				<span id="logout">
+				    logout
+				</span>
+			</div>
+
+			<div id="stngBtn" style="position:fixed; bottom:50px;right:50px;border:solid 2px red;z-index:1;">settings</div>
+
 			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;"></div>
 
 
@@ -152,17 +187,17 @@
 
 
 
-		   	<div id="db_slide" class="form" style="width:50%; height:100vh; background-color:#f9f9f9; right:0; box-shadow: 0 14px 28px rgba(0,0,0,.25),0 0 10px rgba(0,0,0,.22); position: absolute; overflow: hidden;margin-right: 0%;transition: all 0.8s ease-in-out;display: flex;flex-direction: column;padding: 20px;box-sizing: border-box;">
+		   	<div id="db_slide" class="form" style="width:50%; height:100vh; background-color:#f9f9f9; right:0; box-shadow: 0 14px 28px rgba(0,0,0,.25),0 0 10px rgba(0,0,0,.22) overflow: hidden;margin-right: 0%;transition: all 0.8s ease-in-out;padding: 20px;box-sizing: border-box;">
 		    	<div>
-		    		<button class="btn" style="width:155px;" id="db_toggle">
+		    		<button class="btn" style="width:155px; margin-top: 30px!important;" id="db_toggle">
 		    			<span id="lblCourses" style="transition: all 0.5s ease-in-out;"><- My courses</span></button>
 		    		<h1 style="clear:both; font-size: 30px;margin-top: 100px;font-weight: 300;color: #2abfd5;width: 100%;transition: all 0.5s ease-in-out;">My VIT's</h1>
 		    	
 				</div>
-				<div id="vits" style="position:absolute;width:100%;transition: all 0.8s ease-in-out;">
+				<div id="vits" style="height: 80%;width:100%;transition: all 0.8s ease-in-out;">
 
 				</div>
-				<div id="courses" style="opacity:0;transition: all 0.8s ease-in-out;">
+				<div id="courses" style="height:80%;opacity:0;transition: all 0.8s ease-in-out;">
 
 				</div>
 			</div>
