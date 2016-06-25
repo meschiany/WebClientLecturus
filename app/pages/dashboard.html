@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- icons credit -->
+<!-- <div>Icon made from <a href="http://www.onlinewebfonts.com/icon">Icon Fonts</a> is licensed by CC BY 3.0</div> -->
 <html>
 	<head>
 		<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto' rel='stylesheet' type='text/css'> -->
@@ -97,6 +99,11 @@
 			}
 
 			$(document).ready(function() { 
+				
+				$(function(){
+  					$("#header").load("header.html"); 
+				});
+
 				var settingsMenu = false;
 
 				$("#logout").click(function(){
@@ -110,7 +117,7 @@
 						settingsMenu = false;
 					}else{
 						$("#stngMenu").css("padding","15px");
-						$("#stngMenu").css("height","20px");
+						$("#stngMenu").css("height","30px");
 						settingsMenu = true;
 					}
 				});
@@ -162,16 +169,9 @@
 	<body style="margin:0;padding:0; font-family: 'Roboto', sans-serif;">
 		<div ng-controller="dashboardCtrl" >
 
-			<div id="stngMenu" style="overflow:hidden;transition: all 0.4s ease-in-out;position:absolute;z-index:1;height:3px; width:100vw;background-color:#444;">
-				<a href="https://s3-ap-southeast-1.amazonaws.com/lecturus/VITClient.jar">
-					download client
-				</a>
-				<span id="logout">
-				    logout
-				</span>
-			</div>
+			<div id="header">
 
-			<div id="stngBtn" style="position:fixed; bottom:50px;right:50px;border:solid 2px red;z-index:1;">settings</div>
+			</div>
 
 			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;"></div>
 

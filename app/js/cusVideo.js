@@ -14,18 +14,44 @@
         // For each so that we keep chainability.
         return this.each(function() {
 
-        	//TODO order this file
+            //TODO order this file
+
+            function _addFileToDB(second, text){
+                var files = $("#file")[0].files;
+                var file = files[0];
+
+
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('video_id',_videoId);
+                formData.append('second' , second);
+                formData.append('content' , text);
+                formData.append('content_type', "file");
+                formData.append('debug',true);
+                /* Send the data using post with element id name and name2*/
+        
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/post/new_file",
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                }).done(function(data){
+                    console.log(data);
+                });
+                //TODO on server if token is invalid redirect to login page
+            }
             function _addContentToDB(second, text){
                 var formData = {
                     'video_id' : _videoId,
                     'second' : second,
                     'content' : text,
+                    'content_type': "text",
                     'debug':true
                 };
 
-
                 /* Send the data using post with element id name and name2*/
-                var posting = $.get( "http://localhost:3000/text/new", formData );
+                var posting = $.get( "http://localhost:3000/post/new", formData );
 
                 //TODO on server if token is invalid redirect to login page
                 posting.done(function( data ) {
@@ -99,23 +125,44 @@
                         + '</div>' 
                     + '</div>').appendTo($that);
 
-                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 100px;position: absolute;background: #2a2a2a;top: 62px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;display:flex">'
+                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 100px;position: absolute;background: #2a2a2a;top: 35px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;display:flex">'
                         +'<textarea type="text" rows="2" id="inpContent" style="resize: none;height:70px;width:300px;"/>'
                         +'<div style="margin-left:10px;width:80px">  <span class="label">Time on video (seconds)</span>'
                         +'<input type="text" id="inpSec" style="width:50px;margin:10px;">  </div>'
                         +'<div style="width: 200px;display: flex;flex-wrap: wrap;">'
-                        +'<button class="btnlnk" id="saveContent">New</button>'
-                        +'<button class="btnlnk" id="setNow">Set Now</button>'
-                        +'<button class="btnlnk" id="update">Update</button>'
-                        // +'<button class="btnlnk" id="deactivate">Delete</button>
+                        +'<button class="btnlnk" id="saveContent">'
+                        +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><g><path d="M580.1,854.4c-20.3,0-37,16.6-37,37s16.6,37,37,37h339c20.3,0,37-16.6,37-37V302.8c0-10.5-4.3-20.3-11.7-27.1L667,19.9c-6.8-6.2-16-9.9-25.3-9.9h-413c-20.3,0-37,16.6-37,37v400.6c0,20.3,16.6,37,37,37s37-16.6,37-37V84h295.8v320.5c0,20.3,16.6,37,37,37H876c1.8,0,4.3,0,6.2-0.6v413.6L580.1,854.4L580.1,854.4z M876,367.5H635.6V91.4l246.5,227.4v49.3C880.3,367.5,877.8,367.5,876,367.5z M43.9,798.9c0-20.3,16.6-37,37-37h110.9V644.8c0-20.3,16.6-37,37-37c20.3,0,37,16.6,37,37V762h123.3c20.3,0,37,16.6,37,37s-16.6,37-37,37H265.8V953c0,20.3-16.6,37-37,37c-20.3,0-37-16.6-37-37V835.9H80.9C60.5,835.9,43.9,819.3,43.9,798.9z"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g></svg>'
+                        +'</button>'
+                        +'<button class="btnlnk" id="update">'
+                        +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M966.7,215.5L836.1,81.7c-0.1-0.1-0.2-0.2-0.3-0.3c-15.1-15.2-35.3-23.5-56.7-23.5c-21.4,0-41.6,8.3-56.7,23.5L276.9,526.9l-37.6,282L521,774.3l445.5-445.5c15.2-15.2,23.5-35.3,23.5-56.7C990,250.7,981.7,230.6,966.7,215.5z M307.2,738.7l14.1-106l91.9,92.9L307.2,738.7z M917.9,280.2L492.4,705.6L345.2,555.9L771,130c2.9-2.9,6.3-3.4,8.1-3.4c1.8,0,5.1,0.4,8,3.3l130.5,133.7c0.1,0.1,0.2,0.2,0.3,0.3c2.9,2.9,3.4,6.3,3.4,8.1C921.3,273.8,920.8,277.2,917.9,280.2z"/><path d="M866,691.6c0-13.9-14.1-25.2-31.5-25.2S803,677.7,803,691.6c0,0.5,0,0.9,0,1.3v179.2c0,5.1-5.3,9.4-11.6,9.4h-707c-6.3,0-11.6-4.3-11.6-9.4V127.9c0-5.1,5.3-9.4,11.6-9.4h229.6c0.4,0,0.9,0,1.3,0c13.9,0,25.2-14.1,25.2-31.5c0-17.4-11.3-31.5-25.2-31.5c-0.5,0-0.9,0-1.4,0.1H84.5C43.4,55.5,10,88,10,127.9v744.3c0,39.9,33.4,72.4,74.5,72.4h707c41.1,0,74.5-32.5,74.5-72.4V693C866,692.5,866,692.1,866,691.6z"/></g></svg>'
+                        +'</button>'
+                        +'<button class="btnlnk" id="deactivate">'
+                        +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M316.2,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C285.6,792.6,299.3,806.2,316.2,806.2z M500,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C469.4,792.6,483.1,806.2,500,806.2z M683.8,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C653.1,792.6,666.8,806.2,683.8,806.2z M836.9,101.9H710C696.3,49.2,648.8,10,591.9,10H408.1c-56.9,0-104.5,39.2-118.2,91.9H163.1c-67.6,0-122.5,55-122.5,122.5V255h30.6v30.6h61.2v581.9C132.5,935,187.4,990,255,990h490c67.6,0,122.5-55,122.5-122.5V285.6h61.2V255h30.6v-30.6C959.4,156.8,904.4,101.9,836.9,101.9z M408.1,71.3h183.8c22.5,0,42.1,12.4,52.7,30.6H355.4C366,83.7,385.6,71.3,408.1,71.3z M806.2,867.5c0,33.8-27.5,61.3-61.2,61.3H255c-33.8,0-65.5-27.5-65.5-61.3l4.2-581.9h612.5V867.5z M101.9,224.4c0-33.8,27.5-61.3,61.3-61.3h673.7c33.8,0,61.3,27.5,61.3,61.3H101.9z"/></g></svg>'
+                        +'</button>'
+                        +'<input id="file" style="color:#fff;" type="file" id="filePicker">'
                         +'</div>'
                         +'</div>').appendTo($(".player"));
                 }
 
+                //TODO set only as content callback
+                var currentPostId;
+                setTimeout(function(){
+                    for (var i = 0; i < contents.length; i++) {
+                        _setContentOnPlayer(contents[i].second, contents[i].id);
+                    }
+                    // catch change content value
+                    $("input[type='range']").on("change", function(){
 
-                for (var i = 0; i < contents.length; i++) {
-                    _setContentOnPlayer(contents[i].second, contents[i].id);
-                }
+                        updateContent(this.getAttribute("data-content"), $(this).val());
+                        _getPosts(updateCallback);
+                    });
+                    
+                    $("input[type='range']").on("mouseup", function(){
+                        currentPostId = this.getAttribute("data-content");
+                        fillFields(this);
+                    });
+                },1000);
+
 
                 function addTimePosts(){
                     for (var i = 0; i < contents.length; i++) {
@@ -140,18 +187,51 @@
                 }
 
                 function updateContent(postId, newSec){
-                    // updateDB
+                    var type = "text";
                     content = getContentByPostId(postId);
+
+                    var cont = content.content;
+                    if ($("#file").val() || content.content_type == "file"){
+                        cont = $("#file")[0].files[0].name || content.content_type;
+                        type = "file";
+
+
+                        //upload new file
+                        var files = $("#file")[0].files;
+                        var file = files[0];
+
+
+                        var data = new FormData();
+                        data.append('file', file);
+                        data.append('video_id',_videoId);
+                        data.append('debug',true);
+                        /* Send the data using post with element id name and name2*/
+                
+                        $.ajax({
+                            type: "POST",
+                            url: "http://localhost:3000/post/upload_file",
+                            data: data,
+                            contentType: false,
+                            processData: false
+                        }).done(function(data){
+                            console.log(data);
+                        });
+                    }
+                                        
                     var formData = {    
                         'id' : postId,
-                        'content': content.content,
+                        'content': cont,
                         'second': newSec,
+                        'content_type':type,
                         'debug' : true
                     };
 
-                    var posting = $.get( "http://localhost:3000/text/updater", formData );
+                    var posting = $.get( "http://localhost:3000/post/updater", formData );
+
 
                     posting.done(updateCallback);
+
+                    inpSec.value = newSec;
                     
                 }
 
@@ -160,6 +240,10 @@
                         if (contents[i].id == currentPostId){
                             contents[i].content = inpContent.value
                             contents[i].seconds = inpSec.value
+                            contents[i].content_type = "text"
+                            if ($("#file").val()){
+                                contents[i].content_type = "file"
+                            }
                             break;
                         }
                     }
@@ -176,7 +260,7 @@
                         'debug' : true
                     };
 
-                    var posting = $.get( "http://localhost:3000/text/deactivate", formData );
+                    var posting = $.get( "http://localhost:3000/post/deactivate", formData );
 
                     posting.done(updateCallback);
                 }
@@ -184,23 +268,14 @@
                 function fillFields(elm){
                     postId=elm.getAttribute("data-content");
                     content = getContentByPostId(postId);
-
-                    $("#inpContent").val(content.content);
+                    if (content.content_type != "file"){
+                        $("#inpContent").val(content.content);    
+                    }else{
+                        $("#inpContent").val("");
+                    }
                     $("#inpSec").val(content.second);
-
                 }
 
-                // catch change content value
-				$("input[type='range']").on("change", function(){
-
-                    updateContent(this.getAttribute("data-content"), $(this).val());
-					_getPosts(updateCallback);
-				});
-                var currentPostId;
-                $("input[type='range']").on("mouseup", function(){
-                    currentPostId = this.getAttribute("data-content");
-                    fillFields(this);
-                });
 
 				// Width of the video
                 $videoWidth = $this.width();
@@ -275,19 +350,31 @@
 
                 // Run the buffer function
                 bufferLength();
-                $("#setNow").bind('click',_setCurrentTime);
+                $("#inpSec").dblclick(_setCurrentTime);
                 $("#saveContent").bind('click',_saveContent);
                 $("#update").bind('click',_updateCurrentPostId);
-                // $("#deactivate").bind('click',_deactivate);
+                $("#deactivate").bind('click',_deactivate);
 				var inpSec = $("#inpSec")[0];
 				var inpContent = $("#inpContent")[0];
                 // TODO SAVE TO DB AND UPDATE TABLE
                 // IF FAIL - PROMPET MSG
                 function _saveContent(){
-                    contents.push({"second":inpSec.value,"content":inpContent.value,"type":"text"})
+                    var type = "text"
+                    var cont = inpContent.value
+                    if ($("#file").val()){
+                        type = "file"
+                        cont = $("#file")[0].files[0].name
+                    }
+
+                    contents.push({"second":inpSec.value,"content":cont,"content_type":type})
 					_setContentOnPlayer(inpSec.value, 3, progressWidth, duration);
                     printData();
-					_addContentToDB(inpSec.value, inpContent.value);
+                    if ($("#file").val()){
+                        _addFileToDB(inpSec.value, $("#file").val());
+                    }else{
+                        _addContentToDB(inpSec.value, inpContent.value);
+                    }
+
                 }
 
                 function _setCurrentTime(){
@@ -354,7 +441,7 @@
                     // A variable set which we'll use later on
                     if($ignore != true) {
                         $that.find('.progress-bar').css({'width' : updProgWidth+'px'});
-                        $that.find('.progress-button').css({'left' : (updProgWidth-$that.find('.progress-button').width())+'px'});
+                        $that.find('.progress-button').css({'left' : (updProgWidth-10-$that.find('.progress-button').width())+'px'});
                     }
 
                     // Update times

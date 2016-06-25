@@ -41,14 +41,28 @@ function setText(res){
 	$("#preview").html(res.content);
 }
 
+function setFile(res){
+	var fileType = res.content.substr(res.content.lastIndexOf('.')).toLowerCase();
+	if (fileType == ".png" || fileType == ".jpg" || fileType == ".jpeg" || fileType == ".gif"){
+		//TODO change the file path of the production
+		$("#preview").html('<img style="width:200px;height:200px;" src="file:///Users/meschiany/Developer/lecturus/app/assets/uploads/'+res.video_id+'/'+res.content+'">');
+	}else{
+		$("#preview").html('<a target="_blank" style="width:200px;height:200px;" href="file:///Users/meschiany/Developer/lecturus/app/assets/uploads/'+res.video_id+'/'+res.content+'">View/Download file:'+res.content+' </a>');
+	}
+	
+}
+
 function setPreview(){
 	if (contents.length==0){
 		return;
 	}
 	var res = getContent(vit.currentTime);
-	switch (res.type){
+	switch (res.content_type){
 		case "text":
 			setText(res);
+			break;
+		case "file":
+			setFile(res);
 			break;
 	}
 }
@@ -87,23 +101,33 @@ function printData(){
 	if (contents.length==0){
 		return;
 	}
-	$("#contents").append(contents[0].content);	
+	if (contents[0].content_type == "text"){
+		$("#contents").append(contents[0].content);		
+	}else{
+		$("#contents").append("FILE NAME: "+ contents[0].content);	
+	}
+	
 	for (var i = 1; i < contents.length; i++) {
 		$("#contents").append("<div class=lineSep></div>");
-		$("#contents").append(contents[i].content);
+		if (contents[i].content_type == "text"){
+			$("#contents").append(contents[i].content);		
+		}else{
+			$("#contents").append("FILE NAME: "+contents[i].content);	
+		}
 	}
 }
 
 function setVideoSrc(videoId){
-	$("#vitPlayer source").attr("src","http://52.23.174.169:3000/uploads/videos/video"+getUrlParameter("videoId")+".mp4");
-	// $("#vitPlayer source").attr("src","../1.mp4");
+	// $("#vitPlayer source").attr("src","http://52.23.174.169:3000/uploads/videos/video"+getUrlParameter("videoId")+".mp4");
+	$("#vitPlayer source").attr("src","../1.mp4");
 }
 
 
 var initCallback = function( data ) {
 	contents = data.data;
+	console.log(data.data);
 	for (var i = 0; i < contents.length; i++) {
-		contents[i].type="text";
+		// contents[i].type="text";
 	}
 	printData();
 	$('video').on("timeupdate", setPreview);
@@ -127,7 +151,7 @@ function _getPosts(callback){
 		'debug' : true
 	};
 
-	var posting = $.get( "http://localhost:3000/text/get", formData );
+	var posting = $.get( "http://localhost:3000/content/get_content", formData );
 
 	posting.done(callback);
 }
@@ -144,14 +168,22 @@ $(document).ready(function() {
 	_getPosts(initCallback);
 
 
-});
 
+});
+$(function(){
+  $("#header").load("header.html"); 
+  // $("#footer").load("footer.html"); 
+});
 </script>
 
 </head>
 <body style="background-color:#f9f9f9;">
 
-	<div id="wrapper"> 
+	<div id="wrapper">
+
+		<div id="header">
+
+		</div>
 
 		<div class="container" style="float:left; margin:20px;" >
 			<video id="vitPlayer" style="height: 320px;width: 640px;object-fit: contain;object-position: 50% 50%;">
@@ -172,14 +204,6 @@ $(document).ready(function() {
 								<th>content</th>
 							</table>
 		</div>
-		<!-- 
-
-		<div id="data-display" >
-		    {{displayStack['comment'].length}}
-		    <div ng-repeat="c in displayStack['comment']" >
-		        {{c.text}}
-		    </div>
-		</div> -->
 	</div>
 
 </body>
