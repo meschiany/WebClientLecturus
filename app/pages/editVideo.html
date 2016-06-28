@@ -11,114 +11,21 @@
 </style>
 
 <script src='../js/jquery.js'></script>
-
+<script src='../js/consts.js'></script>
+<script src='../js/utils.js'></script>
+<script src='../js/content.js'></script>
 <script src='../js/cusVideo.js'></script>
-
 
 <script type='text/javascript'>
 
-var _videoId;
+
+var lecturus = lecturus || {}; 
 var vit;
-var contents = [];
-	
-function getContent(sec){
-	var result = contents[0];
-	for (var i = 0; i < contents.length; i++) {
-		curCon = contents[i];
-		result = curCon;
-		if (curCon.second<sec){
-			continue;
-		}
-		if (curCon.second > sec){
-			result = curCon;
-			break;
-		}
-	};
-	return result;
-}
 
-function setText(res){
-	$("#preview").html(res.content);
-}
 
-function setFile(res){
-	var fileType = res.content.substr(res.content.lastIndexOf('.')).toLowerCase();
-	if (fileType == ".png" || fileType == ".jpg" || fileType == ".jpeg" || fileType == ".gif"){
-		//TODO change the file path of the production
-		$("#preview").html('<img style="width:200px;height:200px;" src="file:///Users/meschiany/Developer/lecturus/app/assets/uploads/'+res.video_id+'/'+res.content+'">');
-	}else{
-		$("#preview").html('<a target="_blank" style="width:200px;height:200px;" href="file:///Users/meschiany/Developer/lecturus/app/assets/uploads/'+res.video_id+'/'+res.content+'">View/Download file:'+res.content+' </a>');
-	}
-	
-}
-
-function setPreview(){
-	if (contents.length==0){
-		return;
-	}
-	var res = getContent(vit.currentTime);
-	switch (res.content_type){
-		case "text":
-			setText(res);
-			break;
-		case "file":
-			setFile(res);
-			break;
-	}
-}
-
-function _setContentSecond(elm){
-	console.log("The content with id: "+ elm.getAttribute("data-content") + " set new second: " + elm.value);
-	console.log("TODO: update database with new second of content");
-	$("tr[data-content='"+elm.getAttribute("data-content")+"']")[0].cells[1].innerHTML = elm.value;
-}
-
-function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
-}
-function sortfunction(a, b){
-	if (a.second > b.second){
-		return 1
-	}
-	return -1
-}
-
-function printData(){
-	$("#contents").html("");
-	contents.sort(sortfunction);
-	var table = document.getElementById("posts");
-	if (contents.length==0){
-		return;
-	}
-	if (contents[0].content_type == "text"){
-		$("#contents").append(contents[0].content);		
-	}else{
-		$("#contents").append("FILE NAME: "+ contents[0].content);	
-	}
-	
-	for (var i = 1; i < contents.length; i++) {
-		$("#contents").append("<div class=lineSep></div>");
-		if (contents[i].content_type == "text"){
-			$("#contents").append(contents[i].content);		
-		}else{
-			$("#contents").append("FILE NAME: "+contents[i].content);	
-		}
-	}
-}
 
 function setVideoSrc(videoId){
-	// $("#vitPlayer source").attr("src","http://52.23.174.169:3000/uploads/videos/video"+getUrlParameter("videoId")+".mp4");
+	// $("#vitPlayer source").attr("src",consts.SERVER+"/uploads/videos/video"+getUrlParameter("videoId")+".mp4");
 	$("#vitPlayer source").attr("src","../1.mp4");
 }
 
@@ -156,24 +63,30 @@ function _getPosts(callback){
 	posting.done(callback);
 }
 
-$(document).ready(function() { 
-	_videoId = getUrlParameter("videoId");
+function startPlayer(){
 	vit = $('video')[0];
 	$('video').videoPlayer({
 		'playerWidth' : 0.95,
 		'videoClass' : 'video',
 	});
+}
+
+$(document).ready(function() {
+	startPlayer()
+
+	_videoId = getUrlParameter("videoId");
 
 	setVideoSrc(_videoId);
+
+	
 	_getPosts(initCallback);
 
-
-
 });
+
 $(function(){
   $("#header").load("header.html"); 
-  // $("#footer").load("footer.html"); 
 });
+
 </script>
 
 </head>
@@ -197,12 +110,6 @@ $(function(){
 		</div>
 
 		<div id="contents" style="margin:20px">
-							<table id="posts" style="display:none;">
-								<th>id</th>
-								<th>seconds</th>
-								<th>type</th>
-								<th>content</th>
-							</table>
 		</div>
 	</div>
 

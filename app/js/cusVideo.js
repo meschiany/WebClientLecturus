@@ -13,53 +13,7 @@
         }
         // For each so that we keep chainability.
         return this.each(function() {
-
-            //TODO order this file
-
-            function _addFileToDB(second, text){
-                var files = $("#file")[0].files;
-                var file = files[0];
-
-
-                var formData = new FormData();
-                formData.append('file', file);
-                formData.append('video_id',_videoId);
-                formData.append('second' , second);
-                formData.append('content' , text);
-                formData.append('content_type', "file");
-                formData.append('debug',true);
-                /* Send the data using post with element id name and name2*/
-        
-                $.ajax({
-                    type: "POST",
-                    url: "http://localhost:3000/post/new_file",
-                    data: formData,
-                    contentType: false,
-                    processData: false
-                }).done(function(data){
-                    console.log(data);
-                });
-                //TODO on server if token is invalid redirect to login page
-            }
-            function _addContentToDB(second, text){
-                var formData = {
-                    'video_id' : _videoId,
-                    'second' : second,
-                    'content' : text,
-                    'content_type': "text",
-                    'debug':true
-                };
-
-                /* Send the data using post with element id name and name2*/
-                var posting = $.get( "http://localhost:3000/post/new", formData );
-
-                //TODO on server if token is invalid redirect to login page
-                posting.done(function( data ) {
-                    console.log(data);
-                    
-                });
-            }
-
+            
             $(this)[0].addEventListener('loadedmetadata', function() {
 
                 // Basic Variables 
@@ -68,7 +22,6 @@
 
                 // Wrap the video in a div with the class of your choosing
                 $this.wrap('<div class="'+$settings.videoClass+'"></div>');
-
 
                 // Select the div we just wrapped our video in for easy selection.
                 var $that = $this.parent('.'+$settings.videoClass);
@@ -183,8 +136,9 @@
                             return contents[i];
                         }
                     }
-                    console.log("problem with post update");
                 }
+
+                
 
                 function updateContent(postId, newSec){
                     var type = "text";
@@ -194,28 +148,8 @@
                     if ($("#file").val() || content.content_type == "file"){
                         cont = $("#file")[0].files[0].name || content.content_type;
                         type = "file";
-
-
                         //upload new file
-                        var files = $("#file")[0].files;
-                        var file = files[0];
-
-
-                        var data = new FormData();
-                        data.append('file', file);
-                        data.append('video_id',_videoId);
-                        data.append('debug',true);
-                        /* Send the data using post with element id name and name2*/
-                
-                        $.ajax({
-                            type: "POST",
-                            url: "http://localhost:3000/post/upload_file",
-                            data: data,
-                            contentType: false,
-                            processData: false
-                        }).done(function(data){
-                            console.log(data);
-                        });
+                        uploadNewFile()
                     }
                                         
                     var formData = {    
@@ -227,7 +161,6 @@
                     };
 
                     var posting = $.get( "http://localhost:3000/post/updater", formData );
-
 
                     posting.done(updateCallback);
 
@@ -356,8 +289,7 @@
                 $("#deactivate").bind('click',_deactivate);
 				var inpSec = $("#inpSec")[0];
 				var inpContent = $("#inpContent")[0];
-                // TODO SAVE TO DB AND UPDATE TABLE
-                // IF FAIL - PROMPET MSG
+
                 function _saveContent(){
                     var type = "text"
                     var cont = inpContent.value
@@ -374,7 +306,6 @@
                     }else{
                         _addContentToDB(inpSec.value, inpContent.value);
                     }
-
                 }
 
                 function _setCurrentTime(){
@@ -564,6 +495,46 @@
                 // Run the volanim function
                 volanim();
 
+                var formVisibile = function() {
+                    var myform = false;
+                    $that.find('#addPostForm').mouseenter(function() {
+                        myform = true;
+                    });
+
+                    $that.find('#addPostForm').mouseleave(function() {
+                        setTimeout(function(){
+                            if (!myform && !formLock){
+                                hideNewPostForm();
+                            }
+                        },10);
+                        myform = false;
+                    });
+
+                    $that.find('.addContent').hover(function() {
+                        myform = true;
+                        showNewPostForm();
+                    });
+
+                    $that.find('.addContent').mouseleave(function() {
+                        setTimeout(function(){
+                            if (!myform && !formLock){
+                                hideNewPostForm();
+                            }
+                        },10);
+                        myform = false;
+                    });
+                    var formLock = false;
+                    $that.find('.addContent').click(function () {
+                        formLock = !formLock;
+                        if (formLock){
+                            showNewPostForm();
+                        }
+                    });
+                }
+
+                // form handleing so it will be easier to work with.
+                formVisibile()
+                
                 // Check if the user is hovering over the volume button
                 $that.find('.volume').hover(function() {
                     $volhover = true;
@@ -571,43 +542,7 @@
                     $volhover = false;
                 });
 
-
-                var myform = false;
-                $that.find('#addPostForm').mouseenter(function() {
-                    myform = true;
-                });
-
-                $that.find('#addPostForm').mouseleave(function() {
-                    setTimeout(function(){
-                        if (!myform && !formLock){
-                            hideNewPostForm();
-                        }
-                    },10);
-                    myform = false;
-                });
-
-                $that.find('.addContent').hover(function() {
-                    myform = true;
-                    showNewPostForm();
-                });
-
-                $that.find('.addContent').mouseleave(function() {
-                    setTimeout(function(){
-                        if (!myform && !formLock){
-                            hideNewPostForm();
-                        }
-                    },10);
-                    myform = false;
-                });
-                var formLock = false;
-                $that.find('.addContent').click(function () {
-                    formLock = !formLock;
-                    if (formLock){
-                        showNewPostForm();
-                    }
-                });
-
-
+                
                 // For usability purposes then bind a function to the body assuming that the user has clicked mouse
                 // down on the progress bar or volume bar
                 $('body, html').bind('mousemove', function(e) {
@@ -718,21 +653,14 @@
                         // return the user to their previous volume.
                         $spc.volume = $volume;
                         $storevol = $volume;
-
-
                     }
 
                     // If the user hovers over the volume controls, then fade in or out the volume
                     // icon hover class
-
                     if($volhover == false) {
-
                         $that.find('.volume-holder').stop(true, false).fadeOut(100);
                         $that.find('.volume-icon').removeClass('volume-icon-hover');
-
-                    }
-
-                    else {
+                    } else {
                         $that.find('.volume-icon').addClass('volume-icon-hover');
                         $that.find('.volume-holder').fadeIn(100);
                     }
@@ -777,7 +705,6 @@
                     }
                 });
 
-
                 // If the user lets go of the mouse, clicking is false for both volume and progress.
                 // Also the video will begin playing if it was playing before the drag process began.
                 // We're also running the bufferLength function
@@ -815,6 +742,7 @@
                     }
                 });
             });
+
         });
     }
 })(jQuery);

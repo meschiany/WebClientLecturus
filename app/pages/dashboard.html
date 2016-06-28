@@ -7,6 +7,7 @@
 		<link href='../css/login.css' rel='stylesheet' type='text/css'>
 		<link rel='stylesheet' type='text/css' href='../css/player.css' />
 		<script src='../js/jquery.js'></script>
+		<script src='../js/header.js'></script>
 		<script type="text/javascript">
 			var vit = {};
 			function getToken(){
@@ -110,17 +111,7 @@
 					logout();
 				});
 
-				$("#stngBtn").click(function(){
-					if (settingsMenu){
-						$("#stngMenu").css("padding","0px");
-						$("#stngMenu").css("height","3px");
-						settingsMenu = false;
-					}else{
-						$("#stngMenu").css("padding","15px");
-						$("#stngMenu").css("height","30px");
-						settingsMenu = true;
-					}
-				});
+
 
 				
 				$("#db_toggle").click(function(){
