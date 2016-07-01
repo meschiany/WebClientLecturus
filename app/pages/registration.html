@@ -8,6 +8,11 @@
 		var colleges;
 			$(document).ready(function() { 
 
+				$("input[type='email']").on('input',function(e){
+  					$(".warning").css("opacity",0);
+				});
+
+
 				function setCollegeList(){
 					var posting = $.get( "http://localhost:3000/college/get");
 
@@ -54,12 +59,14 @@
 					//TODO on server if token is invalid redirect to login page
 					posting.done(function( data ) {
 						console.log(data);
-						if (data.status){
+						if (data.status == "success"){
 							// window.localStorage.setItem("vitToken", data.data.token);
 							$(".form").css("right","50%");
 							$("#regBtn").prop('disabled', true);
-							$("#regBtn").prop('cursor', "default");
+							$("#regBtn").css('cursor', "no-drop");
 							$("#dlLink").attr("href",data.data.link);
+						}else{
+							$(".warning").css("opacity",1);
 						}
 					});
 				});
@@ -71,6 +78,7 @@
 	</head>
 	<body style="margin:0;padding:0; font-family: 'Roboto', sans-serif;">
 		<div ng-controller="registrationCtrl" >
+			<a href="login.html" class="opBtn">Login</a>
 			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
 
 		    </div>
@@ -88,7 +96,7 @@
 		    		<h1 style="font-size: 30px;font-weight: 300;color: #2abfd5;width: 100%;">Lecturus VIT</h1>
 		    		<p style="font-size: 15px;font-weight: 400;line-height: 26px;color: #757575;margin-bottom: 30px;">Welcome to Lecturus VIT platform</p>
 				    <form id="register" action="new" >
-				    	<span class="label">Username (email)</span>
+				    	<span class="label">Username (email)</span><span class="warning label">Already exists</span>
 				        <input type="email" name="email" ng-model="user.email" required/>
 				        <span class="label">Password</span>
 				        <input type="password" name="password" ng-model="user.password" pattern=".{5,10}" title="5 to 10 characters" required/>

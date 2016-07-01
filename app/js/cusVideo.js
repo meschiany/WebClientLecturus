@@ -78,11 +78,13 @@
                         + '</div>' 
                     + '</div>').appendTo($that);
 
-                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 100px;position: absolute;background: #2a2a2a;top: 35px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;display:flex">'
-                        +'<textarea type="text" rows="2" id="inpContent" style="resize: none;height:70px;width:300px;"/>'
-                        +'<div style="margin-left:10px;width:80px">  <span class="label">Time on video (seconds)</span>'
-                        +'<input type="text" id="inpSec" style="width:50px;margin:10px;">  </div>'
-                        +'<div style="width: 200px;display: flex;flex-wrap: wrap;">'
+                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 110px;position: absolute;background: #2a2a2a;top: 35px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;">'
+                        +'<div style="margin-right:10px;width:80px;float: left;">  <span class="label">Time on video (seconds)</span>'
+                        +'<input type="text" id="inpSec" style="width:50px;margin-top:27px;">  </div>'
+                        +'<div style="color: #2abfd5;margin-left: 90px;text-align: center;cursor: pointer;position: absolute;padding: 5px;border: 2px solid #2abfd5;">Add File</div>'
+                        +'<input id="file" style="z-index:1;margin-top:15px;position: absolute;color:#fff;" type="file" id="filePicker">'
+                        +'<textarea type="text" id="inpContent" style="position: relative;float: left;resize: none;height:60px;bottom: -10px;width:300px;"/>'
+                        +'<div style="float: right;width: 190px;">'
                         +'<button class="btnlnk" id="saveContent">'
                         +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><g><path d="M580.1,854.4c-20.3,0-37,16.6-37,37s16.6,37,37,37h339c20.3,0,37-16.6,37-37V302.8c0-10.5-4.3-20.3-11.7-27.1L667,19.9c-6.8-6.2-16-9.9-25.3-9.9h-413c-20.3,0-37,16.6-37,37v400.6c0,20.3,16.6,37,37,37s37-16.6,37-37V84h295.8v320.5c0,20.3,16.6,37,37,37H876c1.8,0,4.3,0,6.2-0.6v413.6L580.1,854.4L580.1,854.4z M876,367.5H635.6V91.4l246.5,227.4v49.3C880.3,367.5,877.8,367.5,876,367.5z M43.9,798.9c0-20.3,16.6-37,37-37h110.9V644.8c0-20.3,16.6-37,37-37c20.3,0,37,16.6,37,37V762h123.3c20.3,0,37,16.6,37,37s-16.6,37-37,37H265.8V953c0,20.3-16.6,37-37,37c-20.3,0-37-16.6-37-37V835.9H80.9C60.5,835.9,43.9,819.3,43.9,798.9z"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g></svg>'
                         +'</button>'
@@ -92,7 +94,6 @@
                         +'<button class="btnlnk" id="deactivate">'
                         +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M316.2,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C285.6,792.6,299.3,806.2,316.2,806.2z M500,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C469.4,792.6,483.1,806.2,500,806.2z M683.8,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C653.1,792.6,666.8,806.2,683.8,806.2z M836.9,101.9H710C696.3,49.2,648.8,10,591.9,10H408.1c-56.9,0-104.5,39.2-118.2,91.9H163.1c-67.6,0-122.5,55-122.5,122.5V255h30.6v30.6h61.2v581.9C132.5,935,187.4,990,255,990h490c67.6,0,122.5-55,122.5-122.5V285.6h61.2V255h30.6v-30.6C959.4,156.8,904.4,101.9,836.9,101.9z M408.1,71.3h183.8c22.5,0,42.1,12.4,52.7,30.6H355.4C366,83.7,385.6,71.3,408.1,71.3z M806.2,867.5c0,33.8-27.5,61.3-61.2,61.3H255c-33.8,0-65.5-27.5-65.5-61.3l4.2-581.9h612.5V867.5z M101.9,224.4c0-33.8,27.5-61.3,61.3-61.3h673.7c33.8,0,61.3,27.5,61.3,61.3H101.9z"/></g></svg>'
                         +'</button>'
-                        +'<input id="file" style="color:#fff;" type="file" id="filePicker">'
                         +'</div>'
                         +'</div>').appendTo($(".player"));
                 }
@@ -291,6 +292,7 @@
 				var inpContent = $("#inpContent")[0];
 
                 function _saveContent(){
+                    // if 
                     var type = "text"
                     var cont = inpContent.value
                     if ($("#file").val()){
@@ -315,7 +317,7 @@
 
                 function showNewPostForm(){
                     $that.find('.addContent').css("background-color","#4f4f4f");
-                    $that.find('#addPostForm').css("display","flex");
+                    $that.find('#addPostForm').css("display","block");
                     setTimeout(function(){
                         $that.find('#addPostForm').css("opacity","1");
                     },0)

@@ -24,6 +24,18 @@ a{
     color: #000;
 }
 
+
+
+.opBtn{
+    position: absolute;
+    right: 0;
+    margin: 20px;
+    padding: 5px;
+    border: 2px solid #2abfd5;
+    color: #2abfd5;
+    z-index: 1;
+}
+
 .select, input[type='text'], input[type='email'],input[type='password']{
   width: 100%; 
   height: 25px; 
@@ -62,6 +74,11 @@ a{
 .label {
   font-size: 12px; 
   color:#2abfd5
+}
+
+.warning{
+  opacity: 0;
+  color:#d88;
 }
 
 #vits, #courses, #courseVideos {
