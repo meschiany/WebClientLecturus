@@ -24,9 +24,9 @@ function setFile(res){
 	var fileType = res.content.substr(res.content.lastIndexOf('.')).toLowerCase();
 	if (fileType == ".png" || fileType == ".jpg" || fileType == ".jpeg" || fileType == ".gif"){
 		//TODO change the file path of the production
-		$("#preview").html('<img style="width:200px;height:200px;" src="file:///Users/meschiany/Developer/lecturus/app/assets/uploads/'+res.video_id+'/'+res.content+'">');
+		$("#preview").html('<img style="position: relative;width: 100%;" src="'+consts.SERVER+'/uploads/vits/'+res.video_id+'/files/'+res.content+'">');
 	}else{
-		$("#preview").html('<a target="_blank" style="width:200px;height:200px;" href="file:///Users/meschiany/Developer/lecturus/app/assets/uploads/'+res.video_id+'/'+res.content+'">View/Download file:'+res.content+' </a>');
+		$("#preview").html('<a target="_blank" style="width:200px;height:200px;" href="'+consts.SERVER+'/uploads/vits/'+res.video_id+'/files/'+res.content+'">View/Download file:'+res.content+' </a>');
 	}
 	
 }

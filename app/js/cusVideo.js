@@ -1,5 +1,75 @@
 (function($) {
 
+
+    // ui js ------------
+    var fileSwitch = false;
+    function clearForm(){
+        $("#file").val("");
+        $("#inpSec").val("");
+        $("textarea").val("");
+        fileSwitch = true;
+        toggleFile();
+
+    }
+
+    function publish(){
+
+    var formData = {    
+        'id' : _videoId,
+        'debug' : true
+    };
+
+    var posting = $.get( consts.SERVER+"/video/publish", formData );
+
+    posting.done(function(data){window.location = data.data.videoUrl});
+
+    }
+
+    function toggleFile(){
+        
+        if (fileSwitch){
+            //Text
+            $("#fileToggle").css({"background-color":"#2a2a2a", "color":"#2abfd5"});
+            $("textarea").removeAttr("disabled");
+            $("textarea").css("background-color","#fff");
+
+            $("#file").attr("disabled","disabled");
+        }else{
+            //File
+            $("#fileToggle").css({"background-color":"#2abfd5", "color":"#2a2a2a"});
+            $("textarea").attr("disabled","disabled");
+            $("textarea").css("background-color","#ccc");
+
+            $("#file").removeAttr("disabled");
+        }
+        fileSwitch = !fileSwitch;
+    }
+
+
+    function bindUIEvents(){
+
+        $("#clearForm").bind("click",clearForm);
+
+        $("#fileToggle").bind("click",toggleFile);
+
+        $("#publish").bind("click",publish);        
+
+        $(window).keypress(function (e) {
+            if (e.keyCode === 0 || e.keyCode === 32) {
+                e.preventDefault()
+                vidPlayer = $("video")[0];
+                if (vidPlayer.paused == false) {
+                    vidPlayer.pause();
+                } else {
+                    vidPlayer.play();
+                }
+            }
+        });
+
+    }
+
+    // ui js ------------
+
     $.fn.videoPlayer = function(options) {
 
         var settings = {
@@ -77,26 +147,34 @@
                             + '<a href="#"> </a>'
                         + '</div>' 
                     + '</div>').appendTo($that);
-
-                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 110px;position: absolute;background: #2a2a2a;top: 35px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;">'
+                
+                    $('<div id="addPostForm" style="width: 100%;transition: all 0.3s ease-in-out;height: 95px;position: absolute;background: #2a2a2a;top: 35px;border-radius: 5px;opacity:0;padding: 10px;box-sizing: border-box;">'
                         +'<div style="margin-right:10px;width:80px;float: left;">  <span class="label">Time on video (seconds)</span>'
-                        +'<input type="text" id="inpSec" style="width:50px;margin-top:27px;">  </div>'
-                        +'<div style="color: #2abfd5;margin-left: 90px;text-align: center;cursor: pointer;position: absolute;padding: 5px;border: 2px solid #2abfd5;">Add File</div>'
-                        +'<input id="file" style="z-index:1;margin-top:15px;position: absolute;color:#fff;" type="file" id="filePicker">'
-                        +'<textarea type="text" id="inpContent" style="position: relative;float: left;resize: none;height:60px;bottom: -10px;width:300px;"/>'
+                        +'<input type="text" id="inpSec" style="width:50px;margin-top:17px;">  </div>'
+                        +'<div id="fileToggle" style="color: #2abfd5;margin-left: 90px;text-align: center;cursor: pointer;position: absolute;padding: 5px;border: 2px solid #2abfd5;">Add File</div>'
+                        +'<input id="file" disabled style="z-index:1;margin-top:4px;margin-left:60px;position: absolute;color:#fff;" type="file" id="filePicker">'
+                        +'<textarea type="text" id="inpContent" style="margin-top:18px;position: relative;float: left;resize: none;height:42px;bottom: -10px;width:300px;"/>'
                         +'<div style="float: right;width: 190px;">'
-                        +'<button class="btnlnk" id="saveContent">'
+                        +'<button alt="Save new" class="btnlnk" id="saveContent">'
                         +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><g><path d="M580.1,854.4c-20.3,0-37,16.6-37,37s16.6,37,37,37h339c20.3,0,37-16.6,37-37V302.8c0-10.5-4.3-20.3-11.7-27.1L667,19.9c-6.8-6.2-16-9.9-25.3-9.9h-413c-20.3,0-37,16.6-37,37v400.6c0,20.3,16.6,37,37,37s37-16.6,37-37V84h295.8v320.5c0,20.3,16.6,37,37,37H876c1.8,0,4.3,0,6.2-0.6v413.6L580.1,854.4L580.1,854.4z M876,367.5H635.6V91.4l246.5,227.4v49.3C880.3,367.5,877.8,367.5,876,367.5z M43.9,798.9c0-20.3,16.6-37,37-37h110.9V644.8c0-20.3,16.6-37,37-37c20.3,0,37,16.6,37,37V762h123.3c20.3,0,37,16.6,37,37s-16.6,37-37,37H265.8V953c0,20.3-16.6,37-37,37c-20.3,0-37-16.6-37-37V835.9H80.9C60.5,835.9,43.9,819.3,43.9,798.9z"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g></svg>'
                         +'</button>'
-                        +'<button class="btnlnk" id="update">'
+                        +'<button alt="Update" class="btnlnk" id="update">'
                         +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M966.7,215.5L836.1,81.7c-0.1-0.1-0.2-0.2-0.3-0.3c-15.1-15.2-35.3-23.5-56.7-23.5c-21.4,0-41.6,8.3-56.7,23.5L276.9,526.9l-37.6,282L521,774.3l445.5-445.5c15.2-15.2,23.5-35.3,23.5-56.7C990,250.7,981.7,230.6,966.7,215.5z M307.2,738.7l14.1-106l91.9,92.9L307.2,738.7z M917.9,280.2L492.4,705.6L345.2,555.9L771,130c2.9-2.9,6.3-3.4,8.1-3.4c1.8,0,5.1,0.4,8,3.3l130.5,133.7c0.1,0.1,0.2,0.2,0.3,0.3c2.9,2.9,3.4,6.3,3.4,8.1C921.3,273.8,920.8,277.2,917.9,280.2z"/><path d="M866,691.6c0-13.9-14.1-25.2-31.5-25.2S803,677.7,803,691.6c0,0.5,0,0.9,0,1.3v179.2c0,5.1-5.3,9.4-11.6,9.4h-707c-6.3,0-11.6-4.3-11.6-9.4V127.9c0-5.1,5.3-9.4,11.6-9.4h229.6c0.4,0,0.9,0,1.3,0c13.9,0,25.2-14.1,25.2-31.5c0-17.4-11.3-31.5-25.2-31.5c-0.5,0-0.9,0-1.4,0.1H84.5C43.4,55.5,10,88,10,127.9v744.3c0,39.9,33.4,72.4,74.5,72.4h707c41.1,0,74.5-32.5,74.5-72.4V693C866,692.5,866,692.1,866,691.6z"/></g></svg>'
                         +'</button>'
-                        +'<button class="btnlnk" id="deactivate">'
+                        +'<button alt="Remove" class="btnlnk" id="deactivate">'
                         +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M316.2,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C285.6,792.6,299.3,806.2,316.2,806.2z M500,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C469.4,792.6,483.1,806.2,500,806.2z M683.8,806.2c16.9,0,30.6-13.7,30.6-30.6V438.7c0-16.9-13.7-30.6-30.6-30.6c-16.9,0-30.6,13.7-30.6,30.6v336.9C653.1,792.6,666.8,806.2,683.8,806.2z M836.9,101.9H710C696.3,49.2,648.8,10,591.9,10H408.1c-56.9,0-104.5,39.2-118.2,91.9H163.1c-67.6,0-122.5,55-122.5,122.5V255h30.6v30.6h61.2v581.9C132.5,935,187.4,990,255,990h490c67.6,0,122.5-55,122.5-122.5V285.6h61.2V255h30.6v-30.6C959.4,156.8,904.4,101.9,836.9,101.9z M408.1,71.3h183.8c22.5,0,42.1,12.4,52.7,30.6H355.4C366,83.7,385.6,71.3,408.1,71.3z M806.2,867.5c0,33.8-27.5,61.3-61.2,61.3H255c-33.8,0-65.5-27.5-65.5-61.3l4.2-581.9h612.5V867.5z M101.9,224.4c0-33.8,27.5-61.3,61.3-61.3h673.7c33.8,0,61.3,27.5,61.3,61.3H101.9z"/></g></svg>'
+                        +'</button>'
+                        +'<button alt="Clear form" class="btnlnk" id="clearForm">'
+                        +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M740.4,401.4c-46-25.4-92.5-49.9-139.1-74.2c-36.3-18.9-73.3-19.2-110-0.9c-22,11-38.8,27.5-50.4,49.9c116.5,62,232.2,123.6,348.7,185.6c2.2-5.1,4.4-9.3,6-13.7C816.7,491.3,794.5,431.2,740.4,401.4z"/><path d="M875.6,35.1c-9.2-12.8-21.9-20.4-37.2-23.8c-16.7-3.7-26.1,0.2-35,14.3c-53,84.6-106,169.2-159,253.8c-1.7,2.7-3.2,5.4-4.8,8.1c1,1.1,1.5,2,2.3,2.4c36.2,19.3,72.4,38.6,109.1,58.2c1.3-2.1,2-3.1,2.6-4.2c41.6-93.9,83.1-187.8,124.8-281.6C882.7,52.3,881.7,43.5,875.6,35.1z"/><path d="M754.3,597.7c7.1-18.1-1.8-38.5-19.9-45.6c-18-7.2-38.5,1.7-45.6,19.8c-3.7,9.4-80.7,208.2-18.2,347.6c-29.6-0.3-76.3-7.1-141.9-31.8c-12.2-38-20.9-97.3,5.7-166.9c0,0-63.7,72.8-74.3,137.5c-13.7-6.6-28-13.8-43-21.8c-15-8.1-28.9-16-42-23.8c48.1-44.6,73.5-137.9,73.5-137.9c-43.3,60.6-97.5,86.2-135.9,97c-57.1-41.1-88.6-76.3-105.1-100.6c150.8-25,273.9-199.1,279.7-207.4c11.1-15.9,7.2-37.9-8.7-48.9c-15.9-11.2-37.8-7.2-49,8.7c-1.4,1.9-137.8,193.7-271.7,179.5c-10.4-1.1-21,2.5-28.6,10c-7.5,7.5-11.3,17.9-10.2,28.5c1.3,12.4,19.5,125.3,264.8,256.9C522.1,972.6,615.5,990,672.6,990c44.3,0,66.9-10.4,71.7-13c9.4-4.9,16-13.8,18.1-24.3c2.1-10.4-0.7-21.2-7.5-29.4C668.7,819.5,753.5,599.9,754.3,597.7z"/></g></svg>'
+                        +'</button>'
+                        +'<button alt="Publish" class="btnlnk" id="publish">'
+                        +'<svg style="width: 30px;fill: #2abfd5;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M979.9,62.6c-4.3-3.6-9.5-5.8-14.8-6.5c-5.4-0.7-11.1,0.1-16.3,2.7L25.9,515.3c-9.5,4.7-15.6,14.3-15.9,24.9c-0.2,10.6,5.4,20.5,14.6,25.6l210.1,117.3l80.6,195.8c3.9,9.4,12.4,16,22.4,17.4c0.1,0,0.2,0,0.3,0c9.9,1.3,19.9-2.8,26-10.6l71.5-90.5L696,940.5c3.2,1.8,6.7,2.9,10.2,3.4c4.8,0.6,9.8,0,14.4-1.9c8-3.2,14.1-9.9,16.7-18.2L988.8,92.6C992.1,81.8,988.6,69.9,979.9,62.6z M99.9,542.4l712.9-352.7L269.5,638.8c-2.3-1.8-4.3-4.1-6.9-5.6L99.9,542.4z M287.6,661.4c-0.1-0.1-0.1-0.2-0.1-0.3l610.7-504.8L348.6,809.7L287.6,661.4z M692.8,873.4l-229.3-128c-5.5-3-11.4-4.6-17.2-5.7l447.2-529.2L692.8,873.4z"/></g></svg>'
                         +'</button>'
                         +'</div>'
                         +'</div>').appendTo($(".player"));
                 }
+
+                bindUIEvents();
 
                 //TODO set only as content callback
                 var currentPostId;
@@ -150,7 +228,7 @@
                         cont = $("#file")[0].files[0].name || content.content_type;
                         type = "file";
                         //upload new file
-                        uploadNewFile()
+                        uploadNewFile();
                     }
                                         
                     var formData = {    
@@ -161,19 +239,19 @@
                         'debug' : true
                     };
 
-                    var posting = $.get( "http://localhost:3000/post/updater", formData );
+                    var posting = $.get( consts.SERVER+"/post/updater", formData );
 
                     posting.done(updateCallback);
 
-                    inpSec.value = newSec;
+                    $("#inpSec")[0].value = newSec;
                     
                 }
 
                 function updateContentFromForm(){
                     for (var i = 0; i < contents.length; i++) {
                         if (contents[i].id == currentPostId){
-                            contents[i].content = inpContent.value
-                            contents[i].seconds = inpSec.value
+                            contents[i].content = $("#inpContent")[0].value
+                            contents[i].seconds = $("#inpSec")[0].value
                             contents[i].content_type = "text"
                             if ($("#file").val()){
                                 contents[i].content_type = "file"
@@ -185,7 +263,7 @@
 
                 function _updateCurrentPostId(){
                     updateContentFromForm()
-                    updateContent(currentPostId, inpSec.value);
+                    updateContent(currentPostId, $("#inpSec")[0].value);
                 }
 
                 function _deactivate(){
@@ -194,9 +272,18 @@
                         'debug' : true
                     };
 
-                    var posting = $.get( "http://localhost:3000/post/deactivate", formData );
+                    var posting = $.get( consts.SERVER+"/post/deactivate", formData );
+                    
+                    $("input[data-content='"+currentPostId+"']").css("display", "none");
+                    for (var i = 0; i < contents.length; i++) {
+                        if (contents[i].id == currentPostId){
+                            currentPostId = null;
+                            contents.splice(i, 1);
+                            break;
+                        }
+                    }
 
-                    posting.done(updateCallback);
+                    posting.done(printData);
                 }
 
                 function fillFields(elm){
@@ -288,30 +375,28 @@
                 $("#saveContent").bind('click',_saveContent);
                 $("#update").bind('click',_updateCurrentPostId);
                 $("#deactivate").bind('click',_deactivate);
-				var inpSec = $("#inpSec")[0];
-				var inpContent = $("#inpContent")[0];
 
                 function _saveContent(){
                     // if 
                     var type = "text"
-                    var cont = inpContent.value
+                    var cont = $("#inpContent")[0].value
                     if ($("#file").val()){
                         type = "file"
                         cont = $("#file")[0].files[0].name
                     }
 
-                    contents.push({"second":inpSec.value,"content":cont,"content_type":type})
-					_setContentOnPlayer(inpSec.value, 3, progressWidth, duration);
+                    contents.push({"second":$("#inpSec")[0].value,"content":cont,"content_type":type})
+					_setContentOnPlayer($("#inpSec")[0].value, 3, progressWidth, duration);
                     printData();
                     if ($("#file").val()){
-                        _addFileToDB(inpSec.value, $("#file").val());
+                        _addFileToDB($("#inpSec")[0].value, $("#file").val());
                     }else{
-                        _addContentToDB(inpSec.value, inpContent.value);
+                        _addContentToDB($("#inpSec")[0].value, $("#inpContent")[0].value);
                     }
                 }
 
                 function _setCurrentTime(){
-                	inpSec.value = Math.round($spc.currentTime);
+                	$("#inpSec")[0].value = Math.round($spc.currentTime);
 
                 }
 
