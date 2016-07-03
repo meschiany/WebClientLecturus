@@ -10,7 +10,8 @@ myApp.service("$rest", function($http, $user){
        open:function(module, action){
            
            try{
-               var token = $user.getToken();
+               if(action != "login")
+                    var token = $user.getToken();
             }catch(err){
                 
                 //navigate to login page
@@ -43,14 +44,14 @@ function APIAction($http, module, action, token){
     
     this.get = function(success, failure){
         
-        $http.get("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&debug=true")
+        $http.get("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&token="+token+"")
                 .then(success,failure);
         return this;
     }
     
     this.postFile = function(formData, callback){
         
-        $.post("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&debug=true", formData, callback);
+        $.post("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&token="+token+"", formData, callback);
     }
     
     this.getAttsString = function(){
