@@ -10,15 +10,27 @@
 		<script src='../js/header.js'></script>
 		<script type="text/javascript">
 			var vit = {};
+
 			function getToken(){
 				return window.localStorage.getItem("vitToken");
 			}
 
 			function setContentVits(){
 				var data = vit.vits;
+				var curStatus;
 				for (var i = 0; i < data.length; i++) {
-					$("#vits").append("<div class=lineSep></div>");
-					$("#vits").append("<a href=editVideo.html?videoId="+data[i].id+">"+data[i].title+"</a>");
+					if (curStatus != data[i].status){
+						curStatus = data[i].status;
+						$("#vits").append("<div style='font-size: 20px;margin-top: 40px;font-weight: 300;color: #999;width: 100%;'>"+curStatus+"</div>");	
+						$("#vits").append("<div class=lineSep style='margin:5px 0 10px 0;'></div>");
+					}else{
+						$("#vits").append("<div class=lineSep></div>");
+					}
+					if (curStatus == "RECORDING"){
+						$("#vits").append("<a href=#/contribute/"+data[i].id+">"+data[i].title+"</a>");
+					}else{
+						$("#vits").append("<a href=#/editVideo/"+data[i].id+">"+data[i].title+"</a>");
+					}
 				}	
 			}
 
