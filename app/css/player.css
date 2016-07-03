@@ -21,6 +21,15 @@ html, body, #wrapper {
   flex-grow: 1;
   overflow: scroll;
 }
+
+#preview{
+	padding: 20px;
+	box-sizing: border-box;
+	width:640px;
+	background-color:#fff;
+	margin-top: 50px;
+}
+
 .lineSep { 
     margin: 25px 0;
     height: 1px;
