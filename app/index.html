@@ -11,15 +11,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+  <link rel="stylesheet" href="css/contributor.css">
   <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="css/login.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
-  <ul class="menu">
-    <li><a href="#/registration">Register</a></li>
-    <li><a href="#/login" >Login</a></li>
-    <li><a href="#/openVideoSessions" >Recorded now</a></li>
-    <li><a href="#/contribute/6" >Contribute</a></li>
+<body class="theme-bg" ng-clock >
+  <ul class="menu" ng-controller="MenuCtrl">
+    <li ng-show="!userLoggedIn()" ><a href="#/registration">Register</a></li>
+    <li ng-show="!userLoggedIn()" ><a href="#/login" >Login</a></li>
+    <li ng-show="userLoggedIn()" ><a href="#/openVideoSessions" >Recorded now</a></li>
+    <!--<li><a href="#/contribute/6" >Contribute</a></li>-->
+    <li ng-show="userLoggedIn()"><a href="#" >Download Recorder</a></li>
+    <li style="float: right;" ng-show="userLoggedIn()" ng-click="logout()" ><a href="#/registration">Logout</a></li>
   </ul>
 
   <!--[if lt IE 7]>
@@ -34,8 +38,18 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="app.js"></script>
+  <script src="services/user.js" ></script>
+  <link rel='stylesheet' type='text/css' href='LecturusVITWebEditor/css/player.css' />
+<link rel='stylesheet' type='text/css' href='LecturusVITWebEditor/css/login.css' />
+<script src='js/jquery.js'></script>
+<script src='js/api.js'></script>
+<script src='js/consts.js'></script>
+<script src='js/utils.js'></script>
+<script src='js/content.js'></script>
+<script src='js/cusVideo.js'></script>
   <script src="services/lecturusAPI.js" ></script>
   <script src="controllers/login.js"></script>
+    <script src="controllers/dashboard.js"></script>
   <script src="controllers/edit-video.js"></script>
   <script src="controllers/registration.js"></script>
   <script src="controllers/contribute.js"></script>
@@ -43,5 +57,6 @@
   <script src="components/version/version.js"></script>
   <script src="components/version/version-directive.js"></script>
   <script src="components/version/interpolate-filter.js"></script>
+  
 </body>
 </html>

@@ -6,38 +6,7 @@
 	</head>
 	<script src='../js/jquery.js'></script>
 	<script>
-		$(document).ready(function() { 
-
-			$("input").on('input',function(e){
-  				$(".warning").css("opacity",0);
-			});
-
-			$("#login").submit(function(event) {
-
-				/* stop form from submitting normally */
-				event.preventDefault();
-
-				var formData = {	
-	        		'email'    : $('input[name=email]').val(),
-	        		'password' : $('input[name=password]').val()
-	    		};
-
-	    		var $form = $( this );
-				var action = $form.attr( 'action' );
-
-				/* Send the data using post with element id name and name2*/
-				var posting = $.get( "http://localhost:3000/user/"+action, formData );
-
-				posting.done(function( data ) {
-					if (data.status == "success"){
-						window.localStorage.setItem("vitToken", data.data.token);
-						window.location = "dashboard.html"
-					}else{
-						$(".warning").css("opacity",1);
-					}
-				});
-			});
-		});
+		
 		
 
 	</script>
@@ -47,17 +16,17 @@
 		    <div class="bg"></div>
 
 		    <div class="form">
-		    	<a href="registration.html" class="opBtn">Sign-up</a>
+		    	<!--<a href="#registration" class="opBtn">Sign-up</a>-->
 		    	<div class="formContent">
 		    		<h1>Lecturus VIT</h1>
 		    		<p>Welcome to Lecturus VIT platform</p>
-				    <form id="login" action="login">
+				    <form >
 				    	<span class="label">Username</span>
 				        <input type="email" name="email" ng-model="user.email" required/>
 				        <span class="label">Password</span>
 				        <input type="password" name="password" ng-model="user.password" pattern=".{5,10}" title="5 to 10 characters" required/>
 				        <span class="warning label">Wrong cradentials</span>
-				        <input class="btn" type="submit" value="Login" />
+				        <input class="btn" type="button" ng-click="login()" value="Login" />
 				    </form>
 				</div>
 			</div>

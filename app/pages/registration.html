@@ -5,80 +5,13 @@
 		<link href='../css/login.css' rel='stylesheet' type='text/css'>
 		<script src='../js/jquery.js'></script>
 		<script type="text/javascript">
-		var colleges;
-			$(document).ready(function() { 
-
-				$("input[type='email']").on('input',function(e){
-  					$(".warning").css("opacity",0);
-				});
-
-
-				function setCollegeList(){
-					var posting = $.get( "http://localhost:3000/college/get");
-
-					posting.done(function( data ) {
-						console.log(data);
-						for (var i = data.data.length - 1; i >= 0; i--) {
-							element = data.data[i]
-						
-						   	var opt = document.createElement("option");
-						   	if (element.name == ""){
-						   		continue
-						   	}
-						   	opt.value= element.id;
-						   	opt.innerHTML = element.name; // whatever property it has
-
-						   // then append it to the select element
-						   $("#collegeSlct").append(opt);
-						}
-						if (data.status){
-							window.localStorage.setItem("vitToken", data.data.token);
-						}
-					});
-				}
 		
-				$("#register").submit(function(event) {
-
-					/* stop form from submitting normally */
-					event.preventDefault();
-
-					var formData = {	
-		        		'email'       : $('input[name=email]').val(),
-		        		'password'    : $('input[name=password]').val(),
-		        		'f_name'    : $('input[name=fname]').val(),
-		        		'l_name'    : $('input[name=lname]').val(),
-		        		'college_id'    : 1
-		    		};
-
-		    		var $form = $( this );
-					var action = $form.attr( 'action' );
-
-					/* Send the data using post with element id name and name2*/
-					var posting = $.get( "http://localhost:3000/user/"+action, formData );
-
-					//TODO on server if token is invalid redirect to login page
-					posting.done(function( data ) {
-						console.log(data);
-						if (data.status == "success"){
-							// window.localStorage.setItem("vitToken", data.data.token);
-							$(".form").css("right","50%");
-							$("#regBtn").prop('disabled', true);
-							$("#regBtn").css('cursor', "no-drop");
-							$("#dlLink").attr("href",data.data.link);
-						}else{
-							$(".warning").css("opacity",1);
-						}
-					});
-				});
-
-				setCollegeList();
-			});
 			
 		</script>
 	</head>
 	<body style="margin:0;padding:0; font-family: 'Roboto', sans-serif;">
 		<div ng-controller="registrationCtrl" >
-			<a href="login.html" class="opBtn">Login</a>
+			<!--<a href="#login" class="opBtn">Login</a>-->
 			<div class="bg" style="width:50%; height:100vh; background:#2abfd5 url(../images/loginbg.jpg); background-size: cover; background-position: 50% 50%; position: absolute;">
 
 		    </div>
@@ -109,7 +42,7 @@
 					        <input type="text" name="lname" ng-model="user.lname" required/>
 					    </div>
 				        <span class="label">College</span>
-				        <select id="collegeSlct" class="select" ng-options="id as name for (id,name) in colleges" /> 
+				        <select id="collegeSlct" class="select" ng-model="cllegeSelection" ng-options="c.id as c.name for c in colleges" /> 
 				        <input id="regBtn" class="btn"type="submit" ng-click="formSubmit()" value="Create account" />
 				    </form>
 				</div>

@@ -1,0 +1,179 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 28, 2016, 11:10:00 PM
+    Author     : shnizle
+*/
+.theme-bg{
+    
+    background:  #00aff0;
+}
+
+.menu{
+ 
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    z-index: 1;
+    background: inherit;
+        margin: 0;
+    padding: 10px;
+}
+
+.menu li{
+    
+    display: inline-block;
+}
+
+html, body, body > div{
+    
+    height: 100%;
+}
+
+.rap{
+    
+    max-width: 1000px;
+    width:100%;
+    display:block;
+    margin:auto;
+    height: 100%;
+    position: relative;
+}
+
+.posts{
+    
+        position: absolute;
+    bottom: 100px;
+    top: 50px;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+    
+}
+
+.chat-input{
+    
+    position: absolute;
+    bottom:10px;
+    height: 100px;
+       right: 60px;
+   left:10px;
+      
+    max-width: 1000px;
+        border-radius: 7px;
+    background: white;
+}
+
+.chat-input textArea{
+    
+        height: 90%;
+    width: 90%;
+    padding: 0;
+    display: block;
+   
+    resize: none;
+    border: none;
+    border-radius: 7px;
+    /* padding-top: 1%; */
+    top: 5%;
+    left:5%;
+    bottom:5%;
+    right:5%;
+    position: relative;
+    /* bottom: -20px; */
+       
+}
+
+.chat-input textArea:focus{
+    
+    border:none;
+    outline: none;
+}
+
+.buttons{
+    
+        position: absolute;
+    bottom: 10px;
+    height: 100px;
+    right: 5px;
+    padding: 0;
+    width: 50px;
+    
+}
+
+.buttons button{
+    
+    margin:0 2.5%;
+    width:95%;
+    border: solid 1px white;
+    background: none;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    padding: 5px 0;
+    color:white;
+}
+
+.buttons button img{
+    
+    width:auto;
+    height:20px;
+    max-height:30px;
+}
+
+.posts{
+    
+    list-style: none;
+    padding:10px;
+}
+
+.bubble{
+    
+    background: #eee;
+    padding:10px;
+    margin-top:10px;
+    border-radius: 5px;
+    box-shadow:0 3px 5px 0 rgba(0,0,0,0.3), inset 0 -2px 2px 0 rgba(255,255,255,.3);
+}
+
+.bubble:not(.mine){
+    
+    margin-left:30px;
+}
+
+.bubble.file{
+    
+    height: 50px;
+}
+
+.bubble.file label{
+    
+    display: block;
+}
+.bubble img{
+    
+    margin-right:10px;
+    float: left;
+    height: 50px;
+}
+
+.bubble.mine{
+    
+    background: #b7eab7;
+    margin-right:30px;
+    
+}
+
+.bubble p{
+    
+    margin:0;
+}
+
+.bubble .date{
+    
+    font-size: 11px;
+    
+}

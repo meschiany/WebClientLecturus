@@ -59,7 +59,7 @@ function _getPosts(callback){
 		'debug' : true
 	};
 
-	var posting = $.get( "http://localhost:3000/content/get_content", formData );
+	var posting = $.get( consts.SERVER+"/content/get_content", formData );
 
 	posting.done(callback);
 }

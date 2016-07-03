@@ -4,13 +4,33 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<div>
+<div class="rap">
 
-    <ul class="posts" >
-        <li ng-repeat="p in posts" >
-            {{p.content}} - {{p.created_at}}
+    <ul id="postList" class="posts" >
+        <li ng-repeat="p in posts" ng-switch="p.content_type" class='bubble {{p.content_type}}' ng-class="{'mine' : p.user_id == userId}"  >
+        <div ng-switch-when="text" >
+            <p class="content" >{{p.content}}</p>
+            <label class="date" >{{getDateDisplay(p.created_at)}}</label>
+        </div>
+        <div ng-switch-when="file" >
+            <img ng-src="{{ (p.content.indexOf('.jpg') > -1 || p.content.indexOf('.png') > -1) ? p.content : 'http://icons.iconarchive.com/icons/pelfusion/flat-file-type/512/jpg-icon.png';}}" />
+            <label>{{ getFileName(p.content)}}</label>
+            <label class="date" >{{getDateDisplay(p.created_at)}}</label>
+        </div>
         </li>
     </ul>
-    <textarea ng-model="postText" ></textarea>
-    <button ng-click="sendPost()" >Send</button>
+    
+    <div class="chat-input" >
+        <textarea ng-model="postText" placeholder="Enter comment" ></textarea>
+       
+    </div>
+     <div class="buttons" >
+            <button ng-click="sendPost()" >Send</button>
+            <button onclick="$('#file').trigger('click');" >
+                <img src="http://www.iconsdb.com/icons/preview/white/attach-2-xxl.png" />
+            </button>
+            <form id="data">
+             <input id="file" style="display: none;" type="file" name="file" onchange="angular.element(this).scope().uploadFile(this)" />
+            </form>
+        </div>
 </div>

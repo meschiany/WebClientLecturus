@@ -10,13 +10,13 @@
 angular.module('myApp.editVideo', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/editVideo', {
+  $routeProvider.when('/editVideo/:videoId', {
     templateUrl: 'pages/editVideo.html',
     controller: 'editVideoCtrl'
   });
 }])
 
-.controller('editVideoCtrl', ['$scope', '$rest', function($scope, $rest) {
+.controller('editVideoCtrl', function($scope, $rest, $routeParams) {
         
         /**
          * this will hols all data by sec key value
@@ -26,10 +26,13 @@ angular.module('myApp.editVideo', ['ngRoute'])
          * 
          * $videoStreamData[4] = [{'type':"comment", "text":"testing..."];
          */
+
+          window._videoId = $routeParams.videoId;
+
         var videoStreamData = [];
         videoStreamData[4] = videoStreamData[0] = [{'type':"comment", "text":"testing..."}];
         
-        var videoPlayer = document.getElementById("myVideo");
+        var videoPlayer = document.getElementById("vitPlayer");
         
         var currSec = -1;
         
@@ -62,6 +65,75 @@ angular.module('myApp.editVideo', ['ngRoute'])
             console.log(videoStreamData[currSec]);
         }, 1000);
         
+
+
+        var lecturus = lecturus || {}; 
+        var vit;
+
+
+
+        function setVideoSrc(videoId){
+            $("#vitPlayer source").attr("src",consts.SERVER+"/uploads/vits/"+_videoId+"/video"+_videoId+".mp4");
+           }
+
+
+        var initCallback = function( data ) {
+                contents = data.data;
+                console.log(data.data);
+                for (var i = 0; i < contents.length; i++) {
+                        // contents[i].type="text";
+                }
+                printData();
+                $('video').on("timeupdate", setPreview);
+        }
+
+        var updateCallback = function( data ) {
+                for (var i = 0; i < contents.length; i++) {
+                        if (contents[i].id == data.text_id){
+                                for (var key in data){
+                                        contents[i][key] = data[key];
+                                }
+                                break;
+                        }
+                }
+                printData();
+        }
+
+        function _getPosts(callback){
+                var formData = {	
+                        'filters[video_id]' : _videoId,
+                        'debug' : true
+                };
+
+                var posting = $.get( consts.SERVER+"/content/get_content", formData );
+
+                posting.done(callback);
+        }
+
+        function startPlayer(){
+                vit = $('video')[0];
+                $('video').videoPlayer({
+                        'playerWidth' : 0.95,
+                        'videoClass' : 'video',
+                });
+        }
+
+        $(document).ready(function() {
+                startPlayer()
+
+                //_videoId = getUrlParameter("videoId");
+
+                setVideoSrc(_videoId);
+
+
+                _getPosts(initCallback);
+
+        });
+
+        $(function(){
+          $("#header").load("header.html"); 
+        });
+
         
 
-}]);
+});
