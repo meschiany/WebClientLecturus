@@ -7,8 +7,11 @@ html, body, #wrapper {
 }
 
 #wrapper {
-  display: flex;
-  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 #container{
 	flex-grow: 1;	
@@ -44,7 +47,6 @@ html, body, #wrapper {
 	border-radius: 5px;
 	height: 40px;
 	-moz-box-sizing: border-box;
-	float: left;
 	font-family: Arial, sans-serif;
 	position: absolute;
 	padding: 0;
@@ -59,12 +61,12 @@ html, body, #wrapper {
 	user-select: none;
 }
 
-.video:(html) {
+.video:not(html) {
 	position: relative;
-	float:left;
-	border:1px solid #000;
 	height:320px;
 	background-color: #000;
+	background: url("../images/loader.gif") no-repeat 50% 50%;
+    background-size: 30px 30px;
 }
 
 .video:hover .player {
