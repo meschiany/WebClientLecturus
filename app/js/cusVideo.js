@@ -238,12 +238,14 @@
                         'content_type':type,
                         'debug' : true
                     };
-
+                    
+                    $("#inpSec")[0].value = newSec;
+                    
                     var posting = $.get( consts.SERVER+"/post/updater", formData );
 
                     posting.done(updateCallback);
 
-                    $("#inpSec")[0].value = newSec;
+                    
                     
                 }
 
