@@ -3,17 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-myApp.service("$rest", function($http){
+myApp.service("$rest", function($http, $user){
     
    return {
         
        open:function(module, action){
-           return new APIAction($http, module, action);
+           
+           try{
+               var token = $user.getToken();
+            }catch(err){
+                
+                //navigate to login page
+                window.location = "#login";
+            }
+           return new APIAction($http, module, action, token);
        }
    } 
 });
 
-function APIAction($http, module, action){
+function APIAction($http, module, action, token){
+    
     
     var module=module;
     var action=action;
@@ -37,6 +46,11 @@ function APIAction($http, module, action){
         $http.get("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&debug=true")
                 .then(success,failure);
         return this;
+    }
+    
+    this.postFile = function(formData, callback){
+        
+        $.post("http://52.23.174.169:3000/"+module+"/"+action+"?"+this.getAttsString()+this.getFiltersString()+"&debug=true", formData, callback);
     }
     
     this.getAttsString = function(){

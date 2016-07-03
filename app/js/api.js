@@ -8,7 +8,7 @@ function _addContentToDB(second, text){
     };
 
     /* Send the data using post with element id name and name2*/
-    var posting = $.get( "http://localhost:3000/post/new", formData );
+    var posting = $.get( consts.SERVER+"/post/new", formData );
 
     //TODO on server if token is invalid redirect to login page
     posting.done(function( data ) {
@@ -32,7 +32,7 @@ function _addFileToDB(second, text){
 
     $.ajax({
         type: "POST",
-        url: "http://localhost:3000/post/new_file",
+        url: consts.SERVER+"/post/new_file",
         data: formData,
         contentType: false,
         processData: false
@@ -53,7 +53,7 @@ function uploadNewFile(){
 
     $.ajax({
         type: "POST",
-        url: "http://localhost:3000/post/upload_file",
+        url: consts.SERVER+"/post/upload_file",
         data: data,
         contentType: false,
         processData: false

@@ -7,25 +7,16 @@
 
 'use strict';
 
-angular.module('myApp.editVideo', ['ngRoute'])
+angular.module('myApp.vitPlayer', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/editVideo/:videoId', {
-    templateUrl: 'pages/editVideo.html',
-    controller: 'editVideoCtrl'
+  $routeProvider.when('/vitPlayer/:videoId', {
+    templateUrl: 'pages/vitPlayer.html',
+    controller: 'playVideoCtrl'
   });
 }])
 
-.controller('editVideoCtrl', function($scope, $rest, $routeParams) {
-        
-        /**
-         * this will hols all data by sec key value
-         * 
-         * for example in the forth second there is a comment
-         * 
-         * 
-         * $videoStreamData[4] = [{'type':"comment", "text":"testing..."];
-         */
+.controller('playVideoCtrl', function($scope, $rest, $routeParams) {
 
           window._videoId = $routeParams.videoId;
 
@@ -129,6 +120,5 @@ angular.module('myApp.editVideo', ['ngRoute'])
                 _getPosts(initCallback);
 
         });
-        
 
 });

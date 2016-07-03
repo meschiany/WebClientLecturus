@@ -9,7 +9,29 @@ var myApp = angular.module('myApp', [
   'myApp.editVideo',
   'myApp.contribute',
   'myApp.openVideoSessions',
+  'myApp.dashboard',
+  'myApp.vitPlayer',
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/view1'});
+  $routeProvider.otherwise({redirectTo: '/dashboard'});
 }]);
+
+myApp.controller("MenuCtrl", function($scope, $user){
+    
+        $scope.userLoggedIn = function(){
+            try{
+
+                $scope.token = $user.getToken();
+                  return true;
+            } catch(err){
+
+                return false;
+            }
+        }
+        
+      $scope.logout = function(){
+          
+          window.localStorage.setItem("vitToken", "");
+          window.location = "#login";
+      }
+});
