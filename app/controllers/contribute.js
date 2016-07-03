@@ -9,9 +9,15 @@ angular.module('myApp.contribute', ['ngRoute'])
   });
 }])
 
-.controller('ContributeCtrl', ['$scope', '$rest', '$routeParams', function($scope, $rest, $routeParams, $user) {
-        
-        $scope.userId = 1;
+.controller('ContributeCtrl', function($scope, $rest, $routeParams, $user, $state) {
+
+        //get user data
+        $rest.open("user", "get").setFilters({token:$user.getToken()})
+                .get(function(res){
+                    
+                   $scope.userId = res.data.data[0].id;
+           console.log(  $scope.userId);
+        });
         
         $scope.getPosts = function(){
             
@@ -81,7 +87,7 @@ angular.module('myApp.contribute', ['ngRoute'])
             
             
             $.ajax({
-              url: "http://52.23.174.169:3000/post/put_file?video_id="+$routeParams.videoId+"&debug=true",
+              url: "http://52.23.174.169:3000/post/put_file?video_id="+$routeParams.videoId+"&token="+$user.getToken(),
               type: 'POST',
               data: formData,
               async: false,
@@ -115,6 +121,8 @@ angular.module('myApp.contribute', ['ngRoute'])
             var a = p[p.length-1].split(".");
             return a[0];
         }
-        //setInterval($scope.getPosts, 1000);
+        
+         setInterval($scope.getPosts, 1000);
+        
 
-}]);
+});

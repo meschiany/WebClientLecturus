@@ -17,7 +17,7 @@
 				</div>
 				<div id="vits" style="height: 80%;	width:100%;transition: all 0.8s ease-in-out;">
 					<ul>
-					    <li ng-repeat="v in videos">
+					    <li ng-repeat="v in videos | orderBy:'id':true">
 
 					        <a href="#/contribute/{{v.id}}" >{{v.title}}</a>
 					        <div class="lineSep"></div>

@@ -34,32 +34,5 @@ angular.module('myApp.login', ['ngRoute'])
             
         };
         
-        $(document).ready(function() { 
-
-			$("input").on('input',function(e){
-  				$(".warning").css("opacity",0);
-			});
-
-			$("#login").submit(function(event) {
-
-				/* stop form from submitting normally */
-				event.preventDefault();
-
-				var formData = {	
-                                    'email'    : $('input[name=email]').val(),
-                                        'password' : $('input[name=password]').val()
-                                 };
-
-                                var $form = $( this );
-				var action = $form.attr( 'action' );
-
-				/* Send the data using post with element id name and name2*/
-				var posting = $.get( consts.SERVER+"/user/"+action, formData );
-
-				posting.done(function( data ) {
-					
-				});
-			});
-		});
 
 }]);
