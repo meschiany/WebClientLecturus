@@ -89,7 +89,7 @@ angular.module('myApp.contribute', ['ngRoute'])
               contentType: false,
               processData: false,
               success: function (returndata) {
-                 console.log(returndata); 
+                $scope.getPosts();
               }
             });
             

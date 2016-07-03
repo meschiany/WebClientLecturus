@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 .theme-bg{
     
-    background:  #00aff0;
+    background:  #2abfd5;
 }
 
 .menu{
@@ -21,12 +21,25 @@ and open the template in the editor.
     z-index: 1;
     background: inherit;
         margin: 0;
-    padding: 10px;
+    padding: 0px;
+    background: #165761;
 }
 
 .menu li{
     
     display: inline-block;
+}
+
+.menu li, .menu li a{
+    
+    color:white;
+    
+}
+
+.menu li a{
+    
+    display: block;
+    padding:10px;
 }
 
 html, body, body > div{
@@ -80,9 +93,9 @@ html, body, body > div{
     border-radius: 7px;
     /* padding-top: 1%; */
     top: 5%;
-    left:5%;
+    left:1%;
     bottom:5%;
-    right:5%;
+    right:1%;
     position: relative;
     /* bottom: -20px; */
        

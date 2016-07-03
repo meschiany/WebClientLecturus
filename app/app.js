@@ -10,6 +10,7 @@ var myApp = angular.module('myApp', [
   'myApp.contribute',
   'myApp.openVideoSessions',
   'myApp.dashboard',
+  'myApp.vitPlayer',
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/dashboard'});
