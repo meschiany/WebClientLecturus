@@ -19,7 +19,7 @@ angular.module('myApp.editVideo', ['ngRoute'])
 .controller('editVideoCtrl', function($scope, $rest, $routeParams, $user) {
         
         try{
-            return $user.getToken();
+             $user.getToken();
           }catch(err){
                                 
              window.location = "#login";

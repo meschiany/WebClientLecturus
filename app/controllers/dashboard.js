@@ -56,7 +56,7 @@ angular.module('myApp.dashboard', ['ngRoute'])
 						d = [(date.getDate()), (date.getMonth()+1), date.getFullYear()].join('/');
 						d = d + " " + [(date.getHours()), (date.getMinutes()+1)].join(':');
 						$("#courseVideos").append("<div class=lineSep></div>");
-						$("#courseVideos").append("<a href='vitPlayer.html?videoId="+data[i].id+"' style='cursor:pointer;' course_id="+data[i].id+">"+data[i].title+" - <span style='font-size:10px;'>Last modified: <span style='font-size:10px;color:rgb(42, 191, 213);'>"+d+"</span></span></a>");	
+						$("#courseVideos").append("<a href='#/vitPlayer/"+data[i].id+"' style='cursor:pointer;' course_id="+data[i].id+">"+data[i].title+" - <span style='font-size:10px;'>Last modified: <span style='font-size:10px;color:rgb(42, 191, 213);'>"+d+"</span></span></a>");	
 					}
 				}
 			}
