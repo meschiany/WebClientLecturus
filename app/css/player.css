@@ -48,7 +48,7 @@ html, body, #wrapper {
 	height: 40px;
 	-moz-box-sizing: border-box;
 	font-family: Arial, sans-serif;
-	position: absolute;
+	
 	padding: 0;
 	bottom: 3px;
 	z-index: 2;
@@ -59,6 +59,7 @@ html, body, #wrapper {
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+        position: relative;
 }
 
 .video:not(html) {

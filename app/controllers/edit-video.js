@@ -16,7 +16,14 @@ angular.module('myApp.editVideo', ['ngRoute'])
   });
 }])
 
-.controller('editVideoCtrl', function($scope, $rest, $routeParams) {
+.controller('editVideoCtrl', function($scope, $rest, $routeParams, $user) {
+        
+        try{
+            return $user.getToken();
+          }catch(err){
+                                
+             window.location = "#login";
+        }
         
         /**
          * this will hols all data by sec key value
