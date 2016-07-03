@@ -125,9 +125,6 @@ angular.module('myApp.dashboard', ['ngRoute'])
 
 			$(document).ready(function() { 
 				
-				$(function(){
-  					$("#header").load("header.html"); 
-				});
 
 				var settingsMenu = false;
 

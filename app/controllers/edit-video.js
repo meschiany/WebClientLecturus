@@ -129,11 +129,6 @@ angular.module('myApp.editVideo', ['ngRoute'])
                 _getPosts(initCallback);
 
         });
-
-        $(function(){
-          $("#header").load("header.html"); 
-        });
-
         
 
 });
