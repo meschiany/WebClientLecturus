@@ -35,7 +35,7 @@ function setPreview(){
 	if (contents.length === 0){
 		return;
 	}
-	var res = getContent(vit.currentTime);
+	var res = getContent($('video')[0].currentTime);
 	switch (res.content_type){
 		case "text":
 			setText(res);
