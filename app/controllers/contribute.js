@@ -9,7 +9,7 @@ angular.module('myApp.contribute', ['ngRoute'])
   });
 }])
 
-.controller('ContributeCtrl', function($scope, $rest, $routeParams, $user, $state) {
+.controller('ContributeCtrl', function($scope, $rest, $routeParams, $user) {
 
         //get user data
         $rest.open("user", "get").setFilters({token:$user.getToken()})
