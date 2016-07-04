@@ -13,7 +13,7 @@ angular.module('myApp.openVideoSessions', ['ngRoute'])
         
         $scope.getOpenVideos = function(){
             
-            $rest.open("video", "get").setFilters({status:"RECORDING"}).get(
+            $rest.open("video", "get_live_videos").setFilters({status:"RECORDING"}).get(
                   function(res){
                       
                      $scope.videos = res.data.data;
