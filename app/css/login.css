@@ -31,6 +31,16 @@ ul {
 
 li {list-style-type: none;}
 
+#courseVid{
+  transition: all 0.4s ease-in-out;width:50%; 
+  height:100vh; 
+  right:0px; 
+  background:#2abfd5 url(../images/deshboardbg.jpg); 
+  background-size: cover; 
+  background-position: 50% 50%; 
+  position: absolute;
+}
+
 .opBtn{
     position: absolute;
     right: 0;
